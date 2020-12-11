@@ -1,0 +1,74 @@
+---
+title: 'Welcome '
+author: 'Logan Shiller'
+date: '2020-12-08'
+slug: welcome
+categories: []
+tags: []
+description: ''
+---
+
+
+# About me 
+
+#####I am a soon to be graduate of UT. Clearly, I am very excited about the whole thing.I thought it would be fun to share a recipe that I recently tried. My all time favorite food is probably mac and cheese. Using r I have calcualted the metric measurements for ingredients. Using python I have shown how the two can "talk" to eachother, using an example from class. 
+
+
+![](/post/2020-12-08-welcome_files/macncheese.jpeg)
+
+##Ingredients 
+##### Unexpected cheddar(1/4 of the block, grated) - Trader Joes 
+##### 6 oz mexican blend shredded cheese 
+##### 1/8 c flour
+##### 1/8 c butter
+##### 2 c milk
+##### 1/4 tsp each salt,pepper,red pepper flakes, paprika 
+##### 1/2 tbsp minced garlic 
+##### 4 oz diced onion or shallot 
+##### half a box (8 oz) of your favorite noodle. I prefer rigatoni 
+
+##Instructions 
+##### In a pot salt your water and set to a boil. Cook your noodles to desired doneness and strain. In another medium saucepan, melt butter. Sautee the onion and garlic until translucent. Add flour and stir until pale yellow. Add milk and stir until thickened. Turn off the heat and add your cheese. Once the sauce is smooth, add the cheese sauce to your noodles and enjoy. 
+
+
+```{r}
+ounces_to_grams <- function(ounce) {
+  gram <- (ounce*28.349)
+  return(gram)
+}
+
+ounces_to_grams(6)
+ounces_to_grams(8)
+ounces_to_grams(4)
+
+cup_to_milliliter <- function(cup) {
+  milliliter <- (cup*236.588)
+  return(milliliter)
+}
+
+cup_to_milliliter(1/8)
+cup_to_milliliter(2)
+
+library(reticulate)
+library(tidyverse)
+
+```
+###### Use 170.094 g of mexican shredded cheese, 226.792 g noodles, and 113.396 g shallow and garlic. Use 29.57 mL flour and butter and 473.176 mL milk. 
+
+## Python 
+```{python}
+import re
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
+import pandas as pd
+df = sns.load_dataset('diamonds')
+df
+
+# tidying using python is similar to in R 
+df[['x','y','z']].head()
+
+
+```
+
+###### One really awesome way that R and Python can work together is through reticulate. This package allows the user to access python from R Markdown and seamlessly transitioning between the two platforms. Another very conveneint aspect of python that I discovered this year was using pandas. Pandas makes working in python more straight forward by allowing the user to convert a list or numpy array into a pandas dataframe. This makes general manipulating of data cleaner and faster. Above is an example of how the interface between R and Python works using reticulate and pandas. I used an example that I really enjoyed learning about in class this semester. 

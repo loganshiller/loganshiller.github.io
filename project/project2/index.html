@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Logan Shiller" />
+    
+    <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.ico">
+    <title>Project 2</title>
+    <meta name="generator" content="Hugo 0.79.0" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="../../css/main.css" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,200bold,400old" />
+    
+    <!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+
+    
+  </head>
+
+  <body>
+    <div id="wrap">
+      
+      <nav class="navbar navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="../../"><i class="fa fa-home"></i></a>
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div class="navbar-collapse collapse" id="navbar">
+      <ul class="nav navbar-nav navbar-right">
+      
+        
+        <li><a href="../../post/">BLOG</a></li>
+        
+        <li><a href="../../projects/">PROJECTS</a></li>
+        
+        <li><a href="../../resume/">RESUME</a></li>
+        
+      
+      </ul>
+    </div>
+  </div>
+</nav>
+
+      <div class="container">
+        <div class="blog-post">
+          <h3>
+            <strong><a href="../../project/project2/">Project 2</a></strong>
+          </h3>
+        </div>
+ 
+<div class="blog-title">
+          <h4>
+         January 1, 0001 
+            &nbsp;&nbsp;
+            
+          </h4>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="blogpost">
+              
+
+
+<div id="for-this-project-i-used-most-of-the-same-data-from-the-previous-project-which-was-created-by-world-health.-i-have-data-that-describes-all-of-the-countries-in-the-world.-the-variables-are-bmi-and-blood-pressure-for-men-and-women-whether-or-not-the-country-of-question-has-a-universal-health-care-system-and-average-number-of-calories-eaten-per-capitaday.-there-are-data-ranging-from-1980-2008-and-i-have-made-subsets-of-these-countries-by-continent-for-easier-viewing-because-often-having-over-200-different-variables-leads-to-incoherent-statistics.-after-dropping-the-nas-there-are-4474-observations.-below-i-have-done-much-of-the-same-joning-and-wrangling-as-in-the-first-project." class="section level6">
+<h6>For this project I used most of the same data from the previous project which was created by World Health. I have data that describes all of the countries in the world. The variables are BMI and Blood Pressure for men and women, whether or not the country of question has a universal health care system, and average number of calories eaten per capita/day. There are data ranging from 1980-2008 and I have made subsets of these countries by continent for easier viewing because often having over 200 different variables leads to incoherent statistics. After dropping the &quot;NA's&quot; there are 4474 observations. Below I have done much of the same joning and wrangling as in the first project.</h6>
+<pre class="r"><code>northamerica &lt;- healthy %&gt;% filter(country == c(&quot;Antigua and Barbuda&quot;, &quot;Bahamas&quot;, &quot;Bermuda&quot;, &quot;Belize&quot;, &quot;Canada&quot;, &quot;Costa Rica&quot;, &quot;Cuba&quot;, &quot;Dominica&quot;, &quot;Dominican Republic&quot;, &quot;El Salvador&quot;, &quot;Grenada&quot;, &quot;Guatemala&quot;, &quot;Haiti&quot;, &quot;Honduras&quot;, &quot;Jamaica&quot;, &quot;Mexico&quot;, &quot;Nicaragua&quot;, &quot;Panama&quot;,&quot;St. Kitts and Nevis &quot;, &quot;St. Lucia&quot;, &quot;St. Vincent and the Grenadines&quot;, &quot;Trinidad and Tobago&quot;, &quot;United States&quot;)) %&gt;% mutate(country = &quot;North America&quot;)</code></pre>
+<pre><code>## Warning in country == c(&quot;Antigua and Barbuda&quot;, &quot;Bahamas&quot;, &quot;Bermuda&quot;, &quot;Belize&quot;, :
+## longer object length is not a multiple of shorter object length</code></pre>
+<pre class="r"><code>southamerica &lt;- healthy %&gt;% filter(country == c(&quot;Equatorial Guinea&quot;, &quot;Argentina&quot;, &quot;Ecuador&quot;, &quot;Bolivia&quot;, &quot;Brazil&quot;, &quot;Chile&quot;, &quot;Colombia&quot;, &quot;Guyana&quot;, &quot;Paraguay&quot;, &quot;Peru&quot;, &quot;Suriname&quot;, &quot;Uruguay&quot;, &quot;Venezuela&quot;)) %&gt;% mutate(country = &quot;South America&quot;) </code></pre>
+<pre><code>## Warning in country == c(&quot;Equatorial Guinea&quot;, &quot;Argentina&quot;, &quot;Ecuador&quot;,
+## &quot;Bolivia&quot;, : longer object length is not a multiple of shorter object length</code></pre>
+<pre class="r"><code>europe &lt;- healthy %&gt;% filter(country == c(&quot;Albania&quot;, &quot;Andorra&quot;, &quot;Armenia&quot;, &quot;Austria&quot;, &quot;Azerbaijan&quot;, &quot;Belarus&quot;, &quot;Belgium&quot;, &quot;Bosnia and Herzegovina&quot;, &quot;Bulgaria&quot;, &quot;Croatia&quot;, &quot;Cyprus&quot;, &quot;Czechia&quot;, &quot;Denmark&quot;, &quot;Estonia&quot;, &quot;Finland&quot;, &quot;France&quot;, &quot;Georgia&quot;, &quot;Germany&quot;, &quot;Greece&quot;, &quot;Hungary&quot;, &quot;Ireland&quot;, &quot;Iceland&quot;, &quot;Italy&quot;, &quot;Kazakhstan&quot;, &quot;Kosovo&quot;, &quot;Latvia&quot;, &quot;Liechtenstein&quot;, &quot;Lithuania&quot;, &quot;Luxembourg&quot;, &quot;Malta&quot;, &quot;Moldova&quot;, &quot;Monaco&quot;, &quot;Montenegro&quot;, &quot;Netherlands&quot;, &quot;North Macedonia&quot;, &quot;Norway&quot;, &quot;Portugal&quot;, &quot;Poland&quot;, &quot;San Marino&quot;, &quot;Serbia&quot;, &quot;Slovakia&quot;, &quot;Slovenia&quot;, &quot;Spain&quot;, &quot;Sweeden&quot;, &quot;Switzerland&quot;, &quot;Turkey&quot;, &quot;Ukrain&quot;, &quot;United Kingdom&quot;)) %&gt;% mutate(country = &quot;Europe&quot;)
+
+africa &lt;- healthy %&gt;% filter(country ==c(&quot;Algeria&quot;, &quot;Angola Benin&quot;, &quot;Botswana&quot;, &quot;Burkina Faso&quot;, &quot;Benin&quot;, &quot;Cameroon&quot;, &quot;Central African Republic&quot;, &quot;Chad&quot;, &quot;Comoros&quot;, &quot;Congo&quot;, &quot;Cote d&#39;Ivoire&quot;, &quot;Congo, Rep.&quot;, &quot;Djibouti&quot;, &quot;Egypt&quot;, &quot;Eswatini&quot;, &quot;Ethiopia&quot;, &quot;Gabon&quot;, &quot;Gambia&quot;, &quot;Ghana&quot;, &quot;Guinea&quot;,&quot;Guinea-Bissau&quot;, &quot;Kenya&quot;, &quot;Lesotho&quot;, &quot;Liberia&quot;, &quot;Madagascar&quot;, &quot;Malawi&quot;, &quot;Mali&quot;, &quot;Mauritania&quot;, &quot;Mauritius&quot;, &quot;Morocco&quot;, &quot;Namibia&quot;, &quot;Niger&quot;, &quot;Nigeria&quot;, &quot;Rwanda&quot;, &quot;Sao Tome and Principe&quot;, &quot;Senegal&quot;,&quot;Sierra Leone&quot;, &quot;Somalia&quot;, &quot;South Africa&quot;, &quot;Sudan&quot;, &quot;Tanzania&quot;, &quot;Togo&quot;, &quot;Tunisia&quot;, &quot;Uganda&quot;, &quot;Zambia&quot;,&quot;Zimbabwe&quot;, &quot;Mozambique&quot;)) %&gt;% mutate(country = &quot;Africa&quot;)</code></pre>
+<pre><code>## Warning in country == c(&quot;Algeria&quot;, &quot;Angola Benin&quot;, &quot;Botswana&quot;, &quot;Burkina Faso&quot;, :
+## longer object length is not a multiple of shorter object length</code></pre>
+<pre class="r"><code>asia &lt;- healthy %&gt;% filter(country == c(&quot;Afghanistan&quot;, &quot;Armenia&quot;, &quot;Azerbaijan&quot;, &quot;Bahrain&quot;, &quot;Bangladesh&quot;, &quot;Bhutan&quot;, &quot;Brunei&quot;, &quot;Cambodia&quot;, 
+&quot;China&quot;, &quot;Cyprus&quot;, &quot;Georgia&quot;, &quot;India&quot;, &quot;Indonesia&quot;, &quot;Iran&quot;, &quot;Iraq&quot;, &quot;Israel&quot;, &quot;Japan&quot;, &quot;Jordan&quot;, &quot;Kazakhstan&quot;, &quot;Kuwait&quot;, &quot;Kyrgyzstan&quot;, &quot;Laos&quot;, &quot;Lebanon&quot;, &quot;Malaysia&quot;, &quot;Maldives&quot;, &quot;Mongolia&quot;, &quot;Myanmar&quot;, &quot;Nepal&quot;, &quot;North Korea&quot;, &quot;Oman&quot;, &quot;Pakistan&quot;, &quot;Palestine&quot;, 
+&quot;Philippines&quot;, &quot;Qatar&quot;, &quot;Russia&quot;, &quot;Saudi Arabia&quot;, &quot;Singapore&quot;, &quot;South Korea&quot;, &quot;Sri Lanka&quot;, &quot;Syria&quot;, &quot;Taiwan&quot;, &quot;Tajikistan&quot;, &quot;Thailand&quot;, 
+&quot;Timor-Leste&quot;, &quot;Turkey&quot;, &quot;Turkmenistan&quot;, &quot;United Arab Emirates&quot;, &quot;Uzbekistan&quot;, &quot;Vietnam&quot;, &quot;Yemen&quot;)) %&gt;% mutate(country = &quot;Asia&quot;)
+
+c1 &lt;- full_join(europe, southamerica)</code></pre>
+<pre><code>## Joining, by = c(&quot;country&quot;, &quot;year&quot;, &quot;BMI_men&quot;, &quot;BMI_women&quot;, &quot;BP_Men&quot;, &quot;BP_Women&quot;, &quot;Calories&quot;, &quot;Universal_Healthcare&quot;)</code></pre>
+<pre class="r"><code>c2 &lt;- full_join(c1, northamerica)</code></pre>
+<pre><code>## Joining, by = c(&quot;country&quot;, &quot;year&quot;, &quot;BMI_men&quot;, &quot;BMI_women&quot;, &quot;BP_Men&quot;, &quot;BP_Women&quot;, &quot;Calories&quot;, &quot;Universal_Healthcare&quot;)</code></pre>
+<pre class="r"><code>c3 &lt;- full_join(c2, africa)</code></pre>
+<pre><code>## Joining, by = c(&quot;country&quot;, &quot;year&quot;, &quot;BMI_men&quot;, &quot;BMI_women&quot;, &quot;BP_Men&quot;, &quot;BP_Women&quot;, &quot;Calories&quot;, &quot;Universal_Healthcare&quot;)</code></pre>
+<pre class="r"><code>countries &lt;- full_join(c3,asia)</code></pre>
+<pre><code>## Joining, by = c(&quot;country&quot;, &quot;year&quot;, &quot;BMI_men&quot;, &quot;BMI_women&quot;, &quot;BP_Men&quot;, &quot;BP_Women&quot;, &quot;Calories&quot;, &quot;Universal_Healthcare&quot;)</code></pre>
+<pre class="r"><code>healthy &lt;- healthy %&gt;% drop_na()
+countries &lt;- countries %&gt;% drop_na()
+head(countries)</code></pre>
+<pre><code>## # A tibble: 6 x 8
+##   country year  BMI_men BMI_women BP_Men BP_Women Calories Universal_Healthcare
+##   &lt;chr&gt;   &lt;chr&gt;   &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;                &lt;dbl&gt;
+## 1 Europe  1999     25.5      25.1    132      129     2800                    1
+## 2 Europe  2002     26.3      25.1    131      125     3750                    1
+## 3 Europe  2002     25.8      26      132      133     2900                    1
+## 4 Europe  1983     25.4      25.6    136      135     3610                    1
+## 5 Europe  2002     25.5      24.7    131      122     3370                    1
+## 6 Europe  1983     24.8      24.2    137      131     3460                    1</code></pre>
+</div>
+<div id="manova" class="section level3">
+<h3>MANOVA</h3>
+<pre class="r"><code>bpm &lt;- healthy$BP_Men
+bmi &lt;- healthy$BMI_men
+res.man &lt;- manova(cbind(BP_Men, BMI_men, BMI_women, BP_Women, Calories) ~ Universal_Healthcare, data = healthy)
+summary(res.man)</code></pre>
+<pre><code>##                        Df  Pillai approx F num Df den Df    Pr(&gt;F)    
+## Universal_Healthcare    1 0.28169   350.43      5   4468 &lt; 2.2e-16 ***
+## Residuals            4472                                             
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre><code>##  Response BP_Men :
+##                        Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+## Universal_Healthcare    1   2088 2087.64   141.7 &lt; 2.2e-16 ***
+## Residuals            4472  65887   14.73                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+##  Response BMI_men :
+##                        Df  Sum Sq Mean Sq F value    Pr(&gt;F)    
+## Universal_Healthcare    1  4640.6  4640.6  1238.2 &lt; 2.2e-16 ***
+## Residuals            4472 16760.4     3.7                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+##  Response BMI_women :
+##                        Df  Sum Sq Mean Sq F value    Pr(&gt;F)    
+## Universal_Healthcare    1  3535.1  3535.1  713.14 &lt; 2.2e-16 ***
+## Residuals            4472 22168.1     5.0                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+##  Response BP_Women :
+##                        Df Sum Sq Mean Sq F value Pr(&gt;F)
+## Universal_Healthcare    1      0  0.3646  0.0228   0.88
+## Residuals            4472  71511 15.9909               
+## 
+##  Response Calories :
+##                        Df    Sum Sq   Mean Sq F value    Pr(&gt;F)    
+## Universal_Healthcare    1 269542374 269542374  1412.9 &lt; 2.2e-16 ***
+## Residuals            4472 853107672    190766                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>countries%&gt;%group_by(country)%&gt;%summarize(mean(BP_Men),mean(BMI_men),mean(BMI_women), mean(BP_Women), mean(Calories))</code></pre>
+<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre><code>## # A tibble: 5 x 6
+##   country `mean(BP_Men)` `mean(BMI_men)` `mean(BMI_women… `mean(BP_Women)`
+##   &lt;chr&gt;            &lt;dbl&gt;           &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;
+## 1 Africa            132.            21.5             22.6             130.
+## 2 Asia              128.            23.7             24.3             126.
+## 3 Europe            134.            25.6             25.2             129.
+## 4 North …           129.            24.8             26.0             125.
+## 5 South …           130.            24.5             25.4             125.
+## # … with 1 more variable: `mean(Calories)` &lt;dbl&gt;</code></pre>
+<pre class="r"><code>covmats&lt;-countries%&gt;%group_by(country)%&gt;%do(covs=cov(.[3:7]))
+for(i in 1:3){print(as.character(covmats$country[i])); print(covmats$covs[[i]])}</code></pre>
+<pre><code>## [1] &quot;Africa&quot;
+##               BMI_men   BMI_women     BP_Men   BP_Women     Calories
+## BMI_men     1.1858498   1.3917984  0.3199605   1.134387    263.66008
+## BMI_women   1.3917984   3.8707510  0.5596838   2.920553    503.73518
+## BP_Men      0.3199605   0.5596838  5.7193676   4.832016     34.28854
+## BP_Women    1.1343874   2.9205534  4.8320158   8.873518    335.33597
+## Calories  263.6600791 503.7351779 34.2885375 335.335968 157972.33202
+## [1] &quot;Asia&quot;
+##              BMI_men  BMI_women     BP_Men   BP_Women    Calories
+## BMI_men     3.658024   4.478478   3.549012   3.721542    420.5435
+## BMI_women   4.478478   6.569842   4.171739   4.612451    477.9526
+## BP_Men      3.549012   4.171739  12.715415  10.094862    358.7945
+## BP_Women    3.721542   4.612451  10.094862   9.877470    370.0988
+## Calories  420.543478 477.952569 358.794466 370.098814 144903.9526
+## [1] &quot;Europe&quot;
+##                BMI_men     BMI_women        BP_Men     BP_Women    Calories
+## BMI_men     0.22272727    0.05354545   -0.81363636   -0.8790909    134.7182
+## BMI_women   0.05354545    0.37290909    0.04727273    1.2281818   -159.5364
+## BP_Men     -0.81363636    0.04727273    8.81818182    7.9454545   -422.0909
+## BP_Women   -0.87909091    1.22818182    7.94545455   16.5636364   -951.7273
+## Calories  134.71818182 -159.53636364 -422.09090909 -951.7272727 290125.4545</code></pre>
+<pre class="r"><code>pairwise.t.test(countries$BP_Women, countries$country, p.adj=&quot;none&quot;)</code></pre>
+<pre><code>## 
+##  Pairwise comparisons using t tests with pooled SD 
+## 
+## data:  countries$BP_Women and countries$country 
+## 
+##               Africa  Asia    Europe  North America
+## Asia          0.00019 -       -       -            
+## Europe        0.45718 0.01979 -       -            
+## North America 8.1e-08 0.08433 0.00023 -            
+## South America 2.2e-06 0.34325 0.00187 0.40298      
+## 
+## P value adjustment method: none</code></pre>
+<pre class="r"><code>pairwise.t.test(countries$BP_Women, countries$country, p.adj=&quot;bonf&quot;)</code></pre>
+<pre><code>## 
+##  Pairwise comparisons using t tests with pooled SD 
+## 
+## data:  countries$BP_Women and countries$country 
+## 
+##               Africa  Asia   Europe North America
+## Asia          0.0019  -      -      -            
+## Europe        1.0000  0.1979 -      -            
+## North America 8.1e-07 0.8433 0.0023 -            
+## South America 2.2e-05 1.0000 0.0187 1.0000       
+## 
+## P value adjustment method: bonferroni</code></pre>
+<pre class="r"><code>pairwise.t.test(countries$BMI_women, countries$country, p.adj=&quot;none&quot;)</code></pre>
+<pre><code>## 
+##  Pairwise comparisons using t tests with pooled SD 
+## 
+## data:  countries$BMI_women and countries$country 
+## 
+##               Africa  Asia    Europe  North America
+## Asia          0.00118 -       -       -            
+## Europe        6.5e-05 0.14340 -       -            
+## North America 3.5e-10 0.00079 0.22129 -            
+## South America 7.3e-08 0.02391 0.76980 0.21604      
+## 
+## P value adjustment method: none</code></pre>
+<pre class="r"><code>pairwise.t.test(countries$BMI_women, countries$country, p.adj=&quot;bonf&quot;)</code></pre>
+<pre><code>## 
+##  Pairwise comparisons using t tests with pooled SD 
+## 
+## data:  countries$BMI_women and countries$country 
+## 
+##               Africa  Asia    Europe  North America
+## Asia          0.01177 -       -       -            
+## Europe        0.00065 1.00000 -       -            
+## North America 3.5e-09 0.00789 1.00000 -            
+## South America 7.3e-07 0.23911 1.00000 1.00000      
+## 
+## P value adjustment method: bonferroni</code></pre>
+<pre class="r"><code># all variables differed from each other 
+.05/8</code></pre>
+<pre><code>## [1] 0.00625</code></pre>
+<pre class="r"><code># bonferroni correction of 0.0005813953
+.05^8</code></pre>
+<pre><code>## [1] 3.90625e-11</code></pre>
+<pre class="r"><code>ggplot(countries, aes(x = BMI_women, y = BP_Women)) + geom_point() + geom_density_2d() +facet_wrap(~country)+ggtitle(&quot;Plot 1&quot;)</code></pre>
+<p><img src="../../project/project2_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(countries, aes(x = BMI_men, y = BP_Men)) + geom_point() + geom_density_2d() +facet_wrap(~country)+ggtitle(&quot;Plot 2&quot;)</code></pre>
+<p><img src="../../project/project2_files/figure-html/unnamed-chunk-10-1.png" width="672" /> ### MANOVA Analysis ###### A MANOVA was conducted to find the effect of having (or not) universal healthcare on five dependent variables (BMI and blood pressure on men and women, respectively, and the average calories per capita). After this test was done. Blood pressure and BMI for women were chosen as the variables to focus on for clarity. significance is determined based on the bonferoni correction (.00058).</p>
+<div id="there-was-a-significant-difference-among-the-presence-of-universal-healthcare-for-one-of-the-dependent-variables-pillai-trace-4.283f-144.51-p.0001.-the-null-hypothesis-is-rejected." class="section level6">
+<h6>There was a significant difference among the presence of universal healthcare for one of the dependent variables pillai trace = 4.283,F= 144.51, p&lt;.0001. The null hypothesis is rejected.</h6>
+</div>
+<div id="the-assumption-of-normality-was-not-met-due-to-the-non-standard-distribution-in-the-plots-1-and-2.-when-testing-homogenity-and-covaraiances-all-lot-of-the-varaibles-varied-greatly-but-specifically-the-continent-of-africa.-univariate-anovas-were-then-run." class="section level6">
+<h6>The assumption of normality was not met due to the non standard distribution in the plots 1 and 2. When testing homogenity and covaraiances, all lot of the varaibles varied greatly, but specifically the continent of Africa. Univariate ANOVAs were then run.</h6>
+</div>
+<div id="a-total-of-8-tests-were-run-1-manova-5-anova-and-2-t-tests." class="section level6">
+<h6>A total of 8 tests were run: 1 MANOVA, 5 ANOVA and 2 t-tests.</h6>
+</div>
+<div id="an-anova-was-run-for-the-dependent-variables-after-the-manova-with-values-of-f195.01-p.0001-f311.24-p.0001-195.87-p.0001-f105.8-p.0001-and-f213.68-p.0001-respectively-for-bp-and-bmi-of-men-then-bp-and-bmi-for-women-and-calories.-since-the-f-value-is-so-large-and-the-p-value-is-so-low-that-means-there-is-a-significance-between-and-within-variables.-this-makes-sense-because-the-data-are-diverse." class="section level6">
+<h6>An ANOVA was run for the dependent variables after the MANOVA with values of F=195.01 p&lt;.0001, F=311.24 p&lt;.0001, 195.87 p&lt;.0001, F=105.8 p&lt;.0001, and F=213.68 p&lt;.0001 respectively for BP and BMI of men then BP and BMI for women and calories. Since the F value is so large and the p value is so low that means there is a significance between and within variables. This makes sense because the data are diverse.</h6>
+</div>
+<div id="a-post-hoc-analysis-was-performed-conducting-pairwise-t-tests-and-then-pairwise-tests-with-a-bonferroi-correction-to-compare-against.-this-was-done-for-bmi-and-bp-of-women-to-determine-if-a-particular-dependent-variable-was-very-different-across-continents-for-the-presence-of-universal-healthcare.-many-of-the-tests-found-a-significant-difference-across-continents.-africa-and-europe-asia-and-europe-both-americas-and-asia-as-well-as-south-america-and-asia-has-no-significant-difference-for-bp.-bmi-saw-no-significant-difference-for-europe-and-aia-both-americas-and-asia-as-well-as-south-america-and-asia-asia" class="section level6">
+<h6>A post hoc analysis was performed conducting pairwise t tests and then pairwise tests with a bonferroi correction to compare against. This was done for BMI and BP of women to determine if a particular dependent variable was very different across continents for the presence of universal healthcare. Many of the tests found a significant difference across continents. Africa and Europe, Asia and Europe, both Americas and Asia, as well as South America and Asia has no significant difference for BP. BMI saw no significant difference for Europe and Aia, both Americas and Asia, as well as South America and Asia Asia,</h6>
+</div>
+<div id="for-the-new-a-value-in-the-bonferroni-correction.-this-indicates-and-type-i-error-rate-of-3.9e-11." class="section level6">
+<h6>0.05/8 = 0.00625 for the new a value in the bonferroni correction. This indicates and type I error rate of 3.9e^-11.</h6>
+</div>
+</div>
+<div id="randomized-permanova" class="section level3">
+<h3>Randomized PERMANOVA</h3>
+<pre class="r"><code>set.seed(123)
+data_1 &lt;- countries %&gt;% na.omit()
+data_1$Universal_Healthcare &lt;- as.numeric(data_1$Universal_Healthcare)
+dist &lt;- data_1%&gt;%select(BP_Women, BMI_women) %&gt;%dist()
+adonis(dist~country,data=data_1)</code></pre>
+<pre><code>## 
+## Call:
+## adonis(formula = dist ~ country, data = data_1) 
+## 
+## Permutation: free
+## Number of permutations: 999
+## 
+## Terms added sequentially (first to last)
+## 
+##            Df SumsOfSqs MeanSqs F.Model      R2 Pr(&gt;F)    
+## country     4    584.45 146.113  11.893 0.30777  0.001 ***
+## Residuals 107   1314.51  12.285         0.69223           
+## Total     111   1898.97                 1.00000           
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>adonis(dist~Universal_Healthcare,data=data_1)</code></pre>
+<pre><code>## 
+## Call:
+## adonis(formula = dist ~ Universal_Healthcare, data = data_1) 
+## 
+## Permutation: free
+## Number of permutations: 999
+## 
+## Terms added sequentially (first to last)
+## 
+##                       Df SumsOfSqs MeanSqs F.Model      R2 Pr(&gt;F)  
+## Universal_Healthcare   1     65.04  65.044  3.9014 0.03425  0.037 *
+## Residuals            110   1833.92  16.672         0.96575         
+## Total                111   1898.97                 1.00000         
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>ggplot(data=NULL, aes(dist)) + geom_histogram(bins=30, color=&quot;pink&quot;, fill=&quot;light blue&quot;) + geom_vline(xintercept = quantile(dist,0.95), colour = &quot;red&quot;)+ggtitle(&quot;Plot 3&quot;) +scale_fill_brewer(palette = &quot;pastel12&quot;) + scale_y_continuous(&quot;dist&quot;)</code></pre>
+<pre><code>## Warning in pal_name(palette, type): Unknown palette pastel12</code></pre>
+<pre><code>## Don&#39;t know how to automatically pick scale for object of type dist. Defaulting to continuous.</code></pre>
+<p><img src="../../project/project2_files/figure-html/unnamed-chunk-12-1.png" width="672" /> ## Randomization Test PERMANOVA ###### A PERMANOVA test was done for the randomization test for this analysis. The effect of BMI on men and women was chosen as the two variables over a period of time from 1980 to 2008 by the continents.The null hypothesis for a PERMANOVA is that the multivariate means of all groups are equal. The alternative hypothesis is that the multivariate means of all groups are not equal.The PERMANOVA is using the adonis function with 999 permutations and resulted in F = 19.221 and p = 0.001, indicating that the null hypothesis can be rejected and that the meultivariate means between groups are not equal.</p>
+</div>
+<div id="linear-regression" class="section level3">
+<h3>Linear Regression</h3>
+<pre class="r"><code>womenBP &lt;- countries$BP_Women - mean(countries$BP_Women,na.rm=T)
+
+lmfit &lt;- lm(BMI_women~BP_Women*Universal_Healthcare, data=countries)
+summary(lmfit)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = BMI_women ~ BP_Women * Universal_Healthcare, data = countries)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -5.980 -1.104  0.199  1.121  4.199 
+## 
+## Coefficients:
+##                                Estimate Std. Error t value Pr(&gt;|t|)   
+## (Intercept)                   29.456224  10.515659   2.801  0.00603 **
+## BP_Women                      -0.044879   0.082857  -0.542  0.58918   
+## Universal_Healthcare           1.991732  13.643615   0.146  0.88421   
+## BP_Women:Universal_Healthcare -0.004055   0.107662  -0.038  0.97002   
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.984 on 108 degrees of freedom
+## Multiple R-squared:  0.1286, Adjusted R-squared:  0.1044 
+## F-statistic: 5.313 on 3 and 108 DF,  p-value: 0.001874</code></pre>
+<pre class="r"><code>lm_resid &lt;- lmfit$residuals; lm_fitvals &lt;- lmfit$fitted.values
+ggplot()+geom_point(aes(lm_fitvals,lm_resid))+geom_hline(yintercept=0, color=
+&quot;pink&quot;)+ggtitle(&quot;Plot 4&quot;)</code></pre>
+<p><img src="../../project/project2_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<pre class="r"><code>ggplot()+geom_histogram(aes(lm_resid),bins=20, color=&quot;pink&quot;, fill=&quot;light blue&quot;)+ggtitle(&quot;Plot 5&quot;)</code></pre>
+<p><img src="../../project/project2_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(countries, aes(BP_Women, BMI_women, color=Universal_Healthcare)) + geom_point() + geom_smooth(method=&quot;lm&quot;, se=FALSE, fullrange=TRUE, color=&quot;red&quot;)+ggtitle(&quot;Plot 6&quot;)</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="../../project/project2_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<pre class="r"><code>coeftest(lmfit, vcov. = vcovHC(lmfit))</code></pre>
+<pre><code>## 
+## t test of coefficients:
+## 
+##                                 Estimate Std. Error t value Pr(&gt;|t|)  
+## (Intercept)                   29.4562241 15.4357070  1.9083  0.05901 .
+## BP_Women                      -0.0448795  0.1205087 -0.3724  0.71031  
+## Universal_Healthcare           1.9917324 16.5614693  0.1203  0.90450  
+## BP_Women:Universal_Healthcare -0.0040553  0.1294476 -0.0313  0.97507  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div id="linear-regression-1" class="section level3">
+<h3>Linear Regression</h3>
+<div id="a-linear-regression-was-run-when-predicting-the-bmi-of-women-in-countries-of-the-world-that-do-or-do-not-have-a-universal-healthcare-system-from-the-blood-pressure-and-the-interaction-between-the-two-variables.-the-assumptions-of-linearity-and-homoskedasticity-appear-to-not-be-adequately-met-in-plot-4.-in-plot-6-normality-also-is-not-met.-the-intercept-of-the-model-indicates-the-predicted-average-bmi-of-women-is-23.775kg." class="section level6">
+<h6>A linear regression was run when predicting the BMI of Women in countries of the world that do or do not have a universal healthcare system from the blood pressure and the interaction between the two variables. The assumptions of linearity and homoskedasticity appear to not be adequately met in plot 4. In plot 6 normality also is not met. The intercept of the model indicates the predicted average BMI of women is 23.775kg.</h6>
+</div>
+<div id="in-countries-without-a-universal-healthcare-system-there-was-a-decrease-in-predicted-bmi-by-.0448kg.-with-a-universal-healthcare-system-there-is-an-increase-of-1.478-kg.-this-is-a-significant-test-t78.364-p0.0001.in-countries-with-a-universal-healthcare-system-the-bmi-for-an-average-woman-in-that-country-is-significant-as-well-t3.2358-p0.0016.-the-slope-for-blood-pressure-to-bmi-is-lowering-for-places-without-a-universal-healthcare-system-by-.004-but-is-not-significant-with-a-t-value-of--0.0313-and-a-p-value-of-0.975." class="section level6">
+<h6>In countries without a universal healthcare system there was a decrease in predicted BMI by .0448kg. With a universal healthcare system there is an increase of 1.478 kg. this is a significant test (t=78.364, p&lt;0.0001).In countries with a universal healthcare system the BMI for an average woman in that country is significant as well (t=3.2358, p=0.0016). The slope for Blood Pressure to BMI is lowering for places without a universal healthcare system by .004 but is not significant with a t value of -0.0313 and a p value of 0.975.</h6>
+</div>
+<div id="the-r-sqared-value-explains-the-proportion-of-variance.-0.1286" class="section level6">
+<h6>The R sqared value explains the proportion of variance. (0.1286)</h6>
+</div>
+<div id="the-regression-was-recomputed-with-robust-standard-errors.-in-the-case-of-both-variables-and-the-interaction-the-standard-error-decreased.-bp-is-a-good-predictor-of-bmi-because-p0.0001-and-the-presence-of-absence-of-a-universal-healthcare-system-was-a-good-predictor-of-bmi-because-p0.0016.-the-interaction-between-bp-and-presence-of-a-universal-healthcare-system-was-not-significant-p.97." class="section level6">
+<h6>The regression was recomputed with robust standard errors. In the case of both variables and the interaction, the standard error decreased. BP is a good predictor of BMI because p&lt;0.0001 and the presence of absence of a universal healthcare system was a good predictor of BMI because p=0.0016. The interaction between BP and presence of a universal healthcare system was not significant (p=.97).</h6>
+</div>
+</div>
+<div id="bootstrapping" class="section level3">
+<h3>Bootstrapping</h3>
+<pre class="r"><code>fit&lt;-lm(Universal_Healthcare~BP_Women+BMI_women, countries) #fit model
+resids&lt;-fit$residuals #save residuals
+fitted&lt;-fit$fitted.values
+
+resid_resamp&lt;-replicate(5000,{
+new_resids&lt;-sample(resids,replace=TRUE) #resample resids w/ replacement
+countries$Universal_Healthcare&lt;-fitted+new_resids #add new resids to yhats to get new &quot;data&quot;
+fit&lt;-lm(Universal_Healthcare~BP_Women+BMI_women,data=countries) #refit model
+coef(fit) #save coefficient estimates (b0, b1, etc)
+})
+
+set.seed(123)
+
+samp_vec&lt;-replicate(5000, {
+boot_dat &lt;- sample_frac(countries, replace=T)
+boot_fit &lt;- lm(BP_Women~BMI_women*Universal_Healthcare, data=boot_dat)
+coef(boot_fit)
+})
+
+samp_vec %&gt;% t %&gt;% as.data.frame %&gt;% summarize_all(sd)</code></pre>
+<pre><code>##   (Intercept) BMI_women Universal_Healthcare BMI_women:Universal_Healthcare
+## 1    5.971994 0.2483828             9.172951                      0.3696922</code></pre>
+<pre class="r"><code>samp_vec %&gt;% t %&gt;% as.data.frame %&gt;% gather %&gt;% group_by(key) %&gt;% 
+  summarize(lower=quantile(value,.025), upper=quantile(value,.975))</code></pre>
+<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre><code>## # A tibble: 4 x 3
+##   key                              lower   upper
+##   &lt;chr&gt;                            &lt;dbl&gt;   &lt;dbl&gt;
+## 1 (Intercept)                    119.    142.   
+## 2 BMI_women                       -0.617   0.358
+## 3 BMI_women:Universal_Healthcare  -0.942   0.533
+## 4 Universal_Healthcare           -13.4    23.1</code></pre>
+<div id="this-shows-the-bootstapped-linear-regression-run-above.-i-used-a-sample-of-5000.-the-difference-in-standard-error-was-much-greater-when-bootstrapped-119-instead-of-robust-29." class="section level6">
+<h6>This shows the bootstapped linear regression run above. I used a sample of 5000. The difference in standard error was much greater when bootstrapped (119 instead of robust= 29).</h6>
+</div>
+</div>
+<div id="logistic-regression" class="section level3">
+<h3>Logistic Regression</h3>
+<pre class="r"><code>log_fit &lt;-glm(Universal_Healthcare~BMI_women+BP_Women,data=data_1,family=&quot;binomial&quot;)
+summary(log_fit)</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = Universal_Healthcare ~ BMI_women + BP_Women, family = &quot;binomial&quot;, 
+##     data = data_1)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -1.9839  -1.0649   0.7301   0.9217   1.7952  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept) -6.41013    8.15484  -0.786 0.431837    
+## BMI_women    0.36906    0.10801   3.417 0.000633 ***
+## BP_Women    -0.01724    0.05870  -0.294 0.768945    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 149.17  on 111  degrees of freedom
+## Residual deviance: 135.01  on 109  degrees of freedom
+## AIC: 141.01
+## 
+## Number of Fisher Scoring iterations: 4</code></pre>
+<pre class="r"><code>exp(coef(log_fit))</code></pre>
+<pre><code>## (Intercept)   BMI_women    BP_Women 
+##  0.00164481  1.44637735  0.98290327</code></pre>
+<pre class="r"><code>log_probs &lt;- predict(log_fit, type=&quot;response&quot;)
+log_preds &lt;- ifelse(log_probs&gt;.5,1,0)
+table(prediction=log_preds, truth=data_1$Universal_Healthcare)%&gt;%addmargins</code></pre>
+<pre><code>##           truth
+## prediction   0   1 Sum
+##        0    19   6  25
+##        1    24  63  87
+##        Sum  43  69 112</code></pre>
+<pre class="r"><code>(20+63)/112</code></pre>
+<pre><code>## [1] 0.7410714</code></pre>
+<pre class="r"><code>63/69</code></pre>
+<pre><code>## [1] 0.9130435</code></pre>
+<pre class="r"><code>20/43</code></pre>
+<pre><code>## [1] 0.4651163</code></pre>
+<pre class="r"><code>63/86</code></pre>
+<pre><code>## [1] 0.7325581</code></pre>
+<pre class="r"><code>data_1$logit&lt;-predict(log_fit,type = &quot;link&quot;)
+data_1&lt;-data_1%&gt;%mutate(Universal_Healthcare2=as.character(Universal_Healthcare))
+data_1%&gt;%ggplot()+geom_density(aes(logit,color = Universal_Healthcare2,fill = Universal_Healthcare2), alpha=0.5)+ggtitle(&quot;Plot 8&quot;)</code></pre>
+<p><img src="../../project/project2_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
+<pre class="r"><code>ROCplot&lt;-ggplot(data_1)+
+  geom_roc(aes(d=Universal_Healthcare,m=log_probs),n.cuts=0)+
+  ggtitle(&quot;Plot 9&quot;)
+ROCplot</code></pre>
+<p><img src="../../project/project2_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
+<pre class="r"><code>calc_auc(ROCplot)</code></pre>
+<pre><code>##   PANEL group       AUC
+## 1     1    -1 0.6813279</code></pre>
+<pre class="r"><code>class_diag &lt;- function(probs,truth){
+  tab&lt;-table(factor(probs&gt;.5,levels=c(&quot;FALSE&quot;,&quot;TRUE&quot;)),truth)
+  acc=sum(diag(tab))/sum(tab)
+  sens=tab[2,2]/colSums(tab)[2]
+  spec=tab[1,1]/colSums(tab)[1]
+  ppv=tab[2,2]/rowSums(tab)[2]
+  if(is.numeric(truth)==FALSE &amp; is.logical(truth)==FALSE) truth&lt;-as.numeric(truth)-1
+  ord&lt;-order(probs, decreasing=TRUE)
+  probs &lt;- probs[ord]; truth &lt;- truth[ord]
+  TPR=cumsum(truth)/max(1,sum(truth)) 
+  FPR=cumsum(!truth)/max(1,sum(!truth))
+  dup&lt;-c(probs[-1]&gt;=probs[-length(probs)], FALSE)
+  TPR&lt;-c(0,TPR[!dup],1); FPR&lt;-c(0,FPR[!dup],1)
+  n &lt;- length(TPR)
+  auc&lt;- sum( ((TPR[-1]+TPR[-n])/2) * (FPR[-1]-FPR[-n]) )
+
+  data.frame(acc,sens,spec,ppv,auc)
+}</code></pre>
+<pre class="r"><code>#10 Fold Cross Validation
+set.seed(123)
+k=6
+cv_data &lt;- data_1[sample(nrow(data_1)),]
+folds &lt;- cut(seq(1:nrow(data_1)),breaks=k,labels=F)
+
+
+diags&lt;-NULL
+for(i in 1:k){
+  train&lt;-data_1[folds!=i, ]
+  test&lt;-data_1[folds == i, ]
+  truth&lt;-test$Universal_Healthcare
+  
+  cv_fit&lt;-glm(Universal_Healthcare~BMI_women+BP_Women, data=data_1, family=&quot;binomial&quot;)
+  cv_probs&lt;-predict(cv_fit,newdata=test,type=&quot;response&quot;)
+  diags&lt;-rbind(diags,class_diag(cv_probs,truth))
+  ##PROBLEM HERE^, possible to be a problem with first line of class_diag function, check the one he gave y&#39;all this year
+}
+summarize_all(diags, mean)</code></pre>
+<pre><code>##         acc      sens      spec       ppv       auc
+## 1 0.7305068 0.8444444 0.2891941 0.6653657 0.6218977</code></pre>
+</div>
+<div id="logistic-regression-discussion" class="section level3">
+<h3>Logistic Regression Discussion</h3>
+<div id="a-logistic-regression-was-run-to-predict-if-the-presence-of-universal-healthcare-from-bmi-and-bp-of-women.-the-model-predicted-that-the-absence-of-universal-healthcare-and-holding-bmi-increased-the-blood-pressure-of-women-0.99-and-increased-the-bmi-of-women-1.44kg-when-blood-pressure-was-held.-this-finding-is-significant-only-for-blood-pressure.-z3.417-p0.000633" class="section level6">
+<h6>A logistic regression was run to predict if the presence of universal healthcare from BMI and BP of women. The model predicted that the absence of universal healthcare and holding BMI increased the blood pressure of women 0.99 and increased the BMI of women 1.44kg when blood pressure was held. This finding is significant only for blood pressure. (z=3.417 p=0.000633)</h6>
+</div>
+<div id="a-confusion-matrix-was-also-created-with-the-predicted-values-from-te-logistic-regression-above.-accuracy-is-predicted-at-.73-sensitivity-is-.844-specificity-is-.289-the-precision-is-.665" class="section level6">
+<h6>A confusion matrix was also created with the predicted values from te logistic regression above. Accuracy is predicted at .73, sensitivity is .844, specificity is .289, the precision is .665</h6>
+</div>
+<div id="plot-8-is-a-density-plot-that-represents-presence-1-and-absence-0-of-a-universal-healthcare-plan.-the-auc-of-plot-9-is-.681-that-indicates-poor-predictions-of-the-model." class="section level6">
+<h6>Plot 8 is a density plot that represents presence (1) and absence (0) of a universal healthcare plan. The AUC of plot 9 is .681 that indicates poor predictions of the model.</h6>
+</div>
+</div>
+<div id="lasso-regression" class="section level2">
+<h2>LASSO Regression</h2>
+<pre class="r"><code>###LASSO Regression
+y&lt;-as.matrix(data_1$Universal_Healthcare)
+x&lt;-model.matrix(Universal_Healthcare~BMI_women+BP_Women,data=data_1)[,-1]
+x&lt;-scale(x)
+cv&lt;-cv.glmnet(x,y,family=&quot;binomial&quot;)
+lasso&lt;-glmnet(x,y,family=&quot;binomial&quot;,lambda=cv$lambda.1se)
+coef(lasso)</code></pre>
+<pre><code>## 3 x 1 sparse Matrix of class &quot;dgCMatrix&quot;
+##                    s0
+## (Intercept) 0.4780325
+## BMI_women   0.2230658
+## BP_Women    .</code></pre>
+<pre class="r"><code>###LASSO CV
+set.seed(123)
+k=6
+cvlass_data &lt;- data_1[sample(nrow(data_1)),]
+folds &lt;- cut(seq(1:nrow(data_1)),breaks=k,labels=F)
+
+diags&lt;-NULL 
+for(i in 1:k){
+  train&lt;-data_1[folds!=i,]
+  test&lt;-data_1[folds==i,]
+  truth&lt;-test$Universal_Healthcare
+  
+  cvlass_fit&lt;-glm(Universal_Healthcare~BMI_women+BP_Women,data=data_1, family=&quot;binomial&quot;)
+  cvlass_probs&lt;-predict(cvlass_fit,newdata=test,type=&quot;response&quot;)
+  diags&lt;-rbind(diags,class_diag(cvlass_probs,truth))
+}
+#10 Fold CV Findings
+summarize_all(diags, mean)</code></pre>
+<pre><code>##         acc      sens      spec       ppv       auc
+## 1 0.7305068 0.8444444 0.2891941 0.6653657 0.6218977</code></pre>
+<div id="lasso" class="section level3">
+<h3>LASSO</h3>
+<div id="the-lasso-model-predicts-the-healthcare-model-from-bmi-and-blood-pressure-of-women-in-that-country.-the-predictor-variable-retained-is-bmi-of-women-and-was-found-to-be-a-so-0.22-which-is-small.-a-10-fold-cross-validation-was-conducted-in-the-lasso-model.-the-accuracy-is-.73-which-was-the-same-as-the-logistic-regression-accuracy." class="section level6">
+<h6>The LASSO model predicts the healthcare model from BMI and blood pressure of women in that country. The predictor variable retained is BMI of women and was found to be a sO = 0.22 which is small. A 10 fold cross validation was conducted in the LASSO model. The accuracy is .73 which was the same as the logistic regression accuracy.</h6>
+<p>Note that the <code>echo = FALSE</code> parameter was added to the code chunk to prevent printing of the R code that generated the plot.</p>
+</div>
+</div>
+</div>
+
+            
+        <hr>         <div class="related-posts">
+                <h5>Related Posts</h5>
+                
+              </div> 
+            </div>
+          </div>
+
+   <hr>  <div class="disqus">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+
+    (function() {
+      
+      
+      if (window.location.hostname == "localhost")
+        return;
+
+      var disqus_shortname = '';
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div> 
+        </div>
+      </div>
+    </div>
+
+    
+    <footer>
+  <div id="footer">
+    <div class="container">
+      <p class="text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io/">Hugo</a> and
+      <a href="http://www.github.com/nurlansu/hugo-sustain/">sustain</a> with ♥</p>
+    </div>
+  </div>
+</footer>
+<div class="footer"></div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="../../js/docs.min.js"></script>
+<script src="../../js/main.js"></script>
+
+<script src="../../js/ie10-viewport-bug-workaround.js"></script>
+
+
+    
+  </body>
+</html>

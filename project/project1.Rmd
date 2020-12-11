@@ -1,0 +1,202 @@
+---
+title: "Project 1"
+author: "Logan Shiller"
+date: "10/7/2020"
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
+---
+###### In this analysis, data from World Health was used to compare the BMI of men and women, the Blood Pressure of men and women, the calories consumed in a day, and the percentage of a country's budget allocated to healthcare. 
+
+######These datasets share the categorical variable "countries" and "year". 
+###### This data is interesting because I think that it can paint an interesting picture about overall health in different countries around the world. Through the lens of corona virus, world health has become more mainstream and relevant to everyday life. I think and hope that public health will become a more normalized part of everyday curriculum and news. 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(readr)
+library(tidyverse)
+bpmen<-read_csv("https://drive.google.com/uc?export=download&id=1P6PShX-bzAS5NAo7P563xOQioD1N-2TO")
+bpwomen<-read_csv("https://drive.google.com/uc?export=download&id=1igGwNUnOXzSiX2iHuMr6Xt_2HOlX2-qd")
+bmimen<-read_csv("https://drive.google.com/uc?export=download&id=1pmg8mI6TGb1rw9XjagrZOqSVZ7HQ_TKt")
+bmiwomen<-read_csv("https://drive.google.com/uc?export=download&id=15XtsudhnN62T2wvxdiAna_aIlma1WIIL")
+calories<-read_csv("https://drive.google.com/uc?export=download&id=1hxqzdnwvUVrN9ttGZ1EysbozXkJdJFKz")
+money<-read_csv("https://drive.google.com/uc?export=download&id=1QnjKmvGZkklteoLwR6wj-hBctwMpEU1L")
+```
+
+#### Tidying and Joining 
+###### All 6 of the datasets needed tidying. I could not join them until they had been pivoted. It was pretty standard overall. The names of columns were very standard and should be easy to extrapolate the meaning. For example: BMI_men is the average BMI for men in tht country and year. 
+
+```{R}
+bpm1 <- bpmen %>% pivot_longer(!country, names_to = "year", values_to = "BP_Men")
+bpw1 <- bpwomen %>% pivot_longer(!country, names_to = "year", values_to = "BP_Women")
+bmiw <- bmiwomen %>% pivot_longer(!country, names_to = "year", values_to = "BMI_women")
+bmim <- bmimen %>% pivot_longer(!country, names_to = "year", values_to = "BMI_men")
+kcal <- calories %>% pivot_longer(!country, names_to = "year", values_to = "Calories")
+spending <- money %>% pivot_longer(!country, names_to = "year", values_to = "Budget_Healthcare")
+```
+
+```{R}
+c1 <- full_join(bmim, bmiw) 
+c2 <- full_join(c1, bpm1)
+c3 <- full_join(c2, bpw1)
+c4 <- full_join(c3, kcal)
+healthy <- full_join(c4, spending)
+head(healthy)
+```
+
+###### I found 6 dataframes that shared years spanning 1980 to 2008 and also shared a list of most of the countries in the world. I had to pivot_longer the data individually before joining them. I joined them all in steps, to make sure that I was visualizing it properly. I chose full_join because the data shared pretty much all of the same variables but had different numeric values. No observations were dropped. There are now 9601 observations. Previously, there were 189 observations in both blood pressure sets and both BMI sets. There were 168 and 190 observations for the food supply and government spending on health care, respectively. 
+
+#### Wrangling 
+```{r}
+healthy %>% select(country, BP_Men) %>% arrange(BP_Men > 120)
+healthy %>% select(country, BP_Men) %>% arrange(BP_Men < 120)
+```
+```{r}
+northamerica <- healthy %>% filter(country == c("Antigua and Barbuda", "Bahamas", "Bermuda", "Belize", "Canada", "Costa Rica", "Cuba", "Dominica", "Dominican Republic", "El Salvador", "Grenada", "Guatemala", "Haiti", "Honduras", "Jamaica", "Mexico", "Nicaragua", "Panama","St. Kitts and Nevis ", "St. Lucia", "St. Vincent and the Grenadines", "Trinidad and Tobago", "United States")) %>% mutate(country = "North America")
+
+southamerica <- healthy %>% filter(country == c("Equatorial Guinea", "Argentina", "Ecuador", "Bolivia", "Brazil", "Chile", "Colombia", "Guyana", "Paraguay", "Peru", "Suriname", "Uruguay", "Venezuela")) %>% mutate(country = "South America") 
+
+europe <- healthy %>% filter(country == c("Albania", "Andorra", "Armenia", "Austria", "Azerbaijan", "Belarus", "Belgium", "Bosnia and Herzegovina", "Bulgaria", "Croatia", "Cyprus", "Czechia", "Denmark", "Estonia", "Finland", "France", "Georgia", "Germany", "Greece", "Hungary", "Ireland", "Iceland", "Italy", "Kazakhstan", "Kosovo", "Latvia", "Liechtenstein", "Lithuania", "Luxembourg", "Malta", "Moldova", "Monaco", "Montenegro", "Netherlands", "North Macedonia", "Norway", "Portugal", "Poland", "San Marino", "Serbia", "Slovakia", "Slovenia", "Spain", "Sweeden", "Switzerland", "Turkey", "Ukrain", "United Kingdom")) %>% mutate(country = "Europe")
+
+africa <- healthy %>% filter(country ==c("Algeria", "Angola Benin", "Botswana", "Burkina Faso", "Benin", "Cameroon", "Central African Republic", "Chad", "Comoros", "Congo", "Cote d'Ivoire", "Congo, Rep.", "Djibouti", "Egypt", "Eswatini", "Ethiopia", "Gabon", "Gambia", "Ghana", "Guinea","Guinea-Bissau", "Kenya", "Lesotho", "Liberia", "Madagascar", "Malawi", "Mali", "Mauritania", "Mauritius", "Morocco", "Namibia", "Niger", "Nigeria", "Rwanda", "Sao Tome and Principe", "Senegal","Sierra Leone", "Somalia", "South Africa", "Sudan", "Tanzania", "Togo", "Tunisia", "Uganda", "Zambia","Zimbabwe", "Mozambique")) %>% mutate(country = "Africa")
+                                      
+asia <- healthy %>% filter(country == c("Afghanistan", "Armenia", "Azerbaijan", "Bahrain", "Bangladesh", "Bhutan", "Brunei", "Cambodia", 
+"China", "Cyprus", "Georgia", "India", "Indonesia", "Iran", "Iraq", "Israel", "Japan", "Jordan", "Kazakhstan", "Kuwait", "Kyrgyzstan", "Laos", "Lebanon", "Malaysia", "Maldives", "Mongolia", "Myanmar", "Nepal", "North Korea", "Oman", "Pakistan", "Palestine", 
+"Philippines", "Qatar", "Russia", "Saudi Arabia", "Singapore", "South Korea", "Sri Lanka", "Syria", "Taiwan", "Tajikistan", "Thailand", 
+"Timor-Leste", "Turkey", "Turkmenistan", "United Arab Emirates", "Uzbekistan", "Vietnam", "Yemen")) %>% mutate(country = "Asia")
+
+c1 <- full_join(europe, southamerica)
+c2 <- full_join(c1, northamerica)
+c3 <- full_join(c2, africa)
+countries <- full_join(c3,asia)
+head(countries)
+```
+
+```{r}
+healthy %>% group_by(country, year, Calories) %>% mutate(Calories = Calories/2000)
+healthy <- healthy %>% drop_na()
+countries <- countries %>% drop_na()
+ 
+healthy %>% group_by(country, BP_Men, BP_Women, BMI_men, BMI_women, Calories, Budget_Healthcare) %>% summarize(n(), .groups="drop")
+
+healthy %>% group_by(country) %>% summarize(mean(Calories, na.rm = TRUE),.groups="drop")
+healthy %>% group_by(country) %>% summarize(mean(BP_Men, na.rm = TRUE),.groups="drop")
+healthy %>% group_by(country) %>% summarize(mean(BP_Women, na.rm = TRUE),.groups="drop") 
+healthy %>% group_by(country) %>% summarize(mean(BMI_men, na.rm = TRUE),.groups="drop")
+healthy %>% group_by(country) %>% summarize(mean(BMI_women, na.rm = TRUE),.groups="drop")
+healthy %>% group_by(country) %>% summarize(mean(Budget_Healthcare, na.rm = TRUE),.groups="drop") 
+
+healthy %>% group_by(country) %>% summarize(sd(Calories, na.rm = TRUE),.groups="drop")
+healthy %>% group_by(country) %>% summarize(sd(BP_Men, na.rm = TRUE),.groups="drop")
+healthy %>% group_by(country) %>% summarize(sd(BP_Women, na.rm = TRUE),.groups="drop") 
+healthy %>% group_by(country) %>% summarize(sd(BMI_men, na.rm = TRUE),.groups="drop")
+healthy %>% group_by(country) %>% summarize(sd(BMI_women, na.rm = TRUE),.groups="drop") 
+healthy %>% group_by(country) %>% summarize(sd(Budget_Healthcare, na.rm = TRUE),.groups="drop") 
+
+healthy %>% group_by(country) %>% summarize(var(Calories, na.rm = TRUE),.groups="drop")
+healthy %>% group_by(country) %>% summarize(var(BP_Men, na.rm = TRUE),.groups="drop")
+healthy %>% group_by(country) %>% summarize(var(BP_Women, na.rm = TRUE),.groups="drop") 
+healthy %>% group_by(country) %>% summarize(var(BMI_men, na.rm = TRUE),.groups="drop")
+healthy %>% group_by(country) %>% summarize(var(BMI_women, na.rm = TRUE),.groups="drop") 
+healthy %>% group_by(country) %>% summarize(var(Budget_Healthcare, na.rm = TRUE),.groups="drop") 
+
+healthy %>% group_by(country) %>% summarize(min(Calories, na.rm = TRUE),.groups="drop")
+healthy %>% group_by(country) %>% summarize(min(BP_Men, na.rm = TRUE),.groups="drop")
+healthy %>% group_by(country) %>% summarize(min(BP_Women, na.rm = TRUE),.groups="drop") 
+healthy %>% group_by(country) %>% summarize(min(BMI_men, na.rm = TRUE),.groups="drop")
+healthy %>% group_by(country) %>% summarize(min(BMI_women, na.rm = TRUE),.groups="drop") 
+healthy %>% group_by(country) %>% summarize(min(Budget_Healthcare, na.rm = TRUE),.groups="drop") 
+
+healthy %>% group_by(country) %>% summarize(max(Calories, na.rm = TRUE),.groups="drop")
+healthy %>% group_by(country) %>% summarize(max(BP_Men, na.rm = TRUE),.groups="drop")
+healthy %>% group_by(country) %>% summarize(max(BP_Women, na.rm = TRUE),.groups="drop") 
+healthy %>% group_by(country) %>% summarize(max(BMI_men, na.rm = TRUE),.groups="drop")
+healthy %>% group_by(country) %>% summarize(max(BMI_women, na.rm = TRUE),.groups="drop") 
+healthy %>% group_by(country) %>% summarize(max(Budget_Healthcare, na.rm = TRUE),.groups="drop") 
+
+healthy %>% group_by(country) %>% summarize(n_distinct(Calories, na.rm = TRUE),.groups="drop")
+healthy %>% group_by(country) %>% summarize(n_distinct(BP_Men, na.rm = TRUE),.groups="drop")
+healthy %>% group_by(country) %>% summarize(n_distinct(BP_Women, na.rm = TRUE),.groups="drop") 
+healthy %>% group_by(country) %>% summarize(n_distinct(BMI_men, na.rm = TRUE),.groups="drop")
+healthy %>% group_by(country) %>% summarize(n_distinct(BMI_women, na.rm = TRUE),.groups="drop") 
+healthy %>% group_by(country) %>% summarize(n_distinct(Budget_Healthcare, na.rm = TRUE),.groups="drop") 
+
+healthy %>% group_by(country) %>% summarize(cor = cor(Calories, Budget_Healthcare),.groups = "drop", use = "complete.obs")
+healthy %>% group_by(country) %>% summarize(cor = cor(BMI_men, BP_Men),.groups = "drop", use = "complete.obs")
+healthy %>% group_by(country) %>% summarize(cor = cor(BMI_women, BP_Women),.groups = "drop", use = "complete.obs")
+
+
+```
+
+###### Summary statistics were calulated for each numeric variable present in the dataset. 
+###### After using all of the fucntions such as: mean, sd, quantile, min, max, etc. inside of summarize, I can see that more developed countries such as Belgium and Greece have higher average caloric intakes per day, the same was seen for higher blood pressures both of men and women. Specifically in smaller and european countries. 
+###### BMI was seen to be higher in the United States as well as other developed countries but interestingly, United Arab Emirates was also above 28. From outside information, the wage gap is very pronounced in United Arab Emirates so the mean may be skewed higher by a smaller population with exceedingly high access to cheap, calorically dense foods. 
+###### Countries like Sudan and Sierra Leon as well as Djibouti have the smallest BMI's both for women and men. Many careers in these countries are more rural, hands on agriculture so it makes sense that manual labor would lend itself to a lower body mass index. Food scarcity may be more prevalent as supply would depend more on the weather and is less secure than a place like Belgium. 
+###### I think that it is also important to note that the metrics for calculating BMI are not the most accurate to a true testament of fitness or health. Using mutate I created a new variable that divided the number of calories by 2000, which is the daily recommended intake, to show the percentage over or under citizens of a country on average eat. 
+
+
+```{r}
+library(ggcorrplot)
+
+numeric <- healthy %>% select(BP_Men:Budget_Healthcare)
+corrplot::corrplot(cor(numeric)) 
+```
+###### The correlation graph shows that there is a strong correlation between similar variables (blood pressure for men and women follow similar trends, as does BMI between men and women. Interestingly, there was more of a relationship between percentage of budget a country spent on healthcare and BMI than Blood Pressure. This is interesting because both are indicative of health. There is also more of a correlation between budget for healthcare and the men's blood pressure and BMI rather than women's. It would be interesting if there was another variable that had funding for women specific healthcare such as mammograms to compare this theory. 
+
+```{r}
+countries %>% ggplot(aes(year, Calories, color = country)) + geom_point() + ggtitle("Calories Per Year in Different Continents") + theme(plot.title=element_text(hjust = 50)) + scale_x_discrete(breaks=seq(0, 2010, 5)) +
+theme(axis.text.x = element_text(color="black", size=6, angle=90)) + geom_smooth(method = "lm") + facet_wrap(~country) 
+
+```
+###### This grouping of charts consistently indicates that countries in Europe eat more calories per day than any other continent. Asia sees the biggest spread. This may because there are a lot of different countries in Asia that cause it to fluctuate wildly or it could be because agriculture is a large part of the economy in large countries like China and India so the weather could play a large role in the available calories. Africa sees a positve slope, indicating that over time more calories are being consumed. This may be due to an increase in industrialization brought on by technlogy making agriculture easier and yielding more over time. Norht America and South America both stayed fairly steady over time. 
+
+```{r}
+countries <- drop_na(countries)
+
+ggplot(countries, aes(year, Budget_Healthcare, fill=country)) + 
+geom_bar(stat = "summary", fun.y = "mean") + scale_fill_brewer(palette = "Pastel2") + ggtitle("Percent of Budget on Healthcare") + ylab("Percentage as Decimal")
+
+```
+###### It appears that Aisa has consistently spent less money on healthcare than other continents. In the 1990's, Africa had simialr levels of percentage spending as Asia but has increased over time. North America initially spent most but has decreased over time. Europe has more of less stayed the same over time, but has always been one of the cotinents that spends the most of the budget in comparison on healthcare. This data had a lot of values for NA so it may be less conclusive. 
+
+```{r}
+# Determining number of clusters 
+health <-  healthy %>% select(-2,-country,-year)
+health_nums <-  health %>% select_if(is.numeric) %>% scale
+
+library(cluster)
+library(factoextra)
+
+pam.res <- pam(health, 6)
+pam.res$medoids
+head(pam.res$cluster)
+pam.res <- pam(scale(health), 6)
+clusplot(pam.res, main = "Cluster plot, k = 6", color = TRUE)
+fviz_cluster(pam.res)
+
+clust_df <- health %>% select(c(BP_Men, BMI_men, Budget_Healthcare))
+
+clusplot(pam.res, main = "Cluster plot, k = 6", color = TRUE)
+
+```
+###### This indicates that ther should be two clusters. 
+```{r}
+ds_pam <- clust_df%>% pam(3)
+ds_pam
+
+clust_final<-clust_df%>%mutate(cluster=as.factor(ds_pam$clustering))
+confmat<-clust_final%>% group_by(Budget_Healthcare) %>% count(cluster)%>%
+  arrange(desc(n))%>% 
+  pivot_wider(names_from="cluster",values_from="n",values_fill = list('n'=0))
+confmat
+
+#evaluating cluster
+ds_pam$silinfo$avg.width
+
+ggplot(clust_final, aes(x=BMI_men,y=BP_Men, color=cluster, size = Budget_Healthcare))+
+geom_point() +
+ggtitle("PAM Clustering of Male BMI and BP by Percent of Budget Allocated to Healthcare")
+
+```
+###### Ideal amount of clusters was much less than the three that I went with because clustering of data was not strong, regardless of number of clusters and this was easier to at least visualize. 

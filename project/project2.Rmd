@@ -1,0 +1,339 @@
+---
+title: "Project 2"
+author: "Logan Shiller"
+date: "11/20/2020"
+output:
+  html_document: default
+  pdf_document: default
+---
+###### For this project I used most of the same data from the previous project which was created by World Health. I have data that describes all of the countries in the world. The variables are BMI and Blood Pressure for men and women, whether or not the country of question has a universal health care system, and average number of calories eaten per capita/day. There are data ranging from 1980-2008 and I have made subsets of these countries by continent for easier viewing because often having over 200 different variables leads to incoherent statistics. After dropping the "NA's" there are 4474 observations. Below I have done much of the same joning and wrangling as in the first project. 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(readr)
+library(ggplot2)
+library(lattice)
+library(permute)
+library(vegan)
+library(tidyverse)
+library(dplyr)
+library(plotROC)
+library(zoo)
+library(lmtest)
+library(sandwich)
+library(glmnet)
+library(rstatix)
+bpmen<-read_csv("https://drive.google.com/uc?export=download&id=1P6PShX-bzAS5NAo7P563xOQioD1N-2TO")
+bpwomen<-read_csv("https://drive.google.com/uc?export=download&id=1igGwNUnOXzSiX2iHuMr6Xt_2HOlX2-qd")
+bmimen<-read_csv("https://drive.google.com/uc?export=download&id=1pmg8mI6TGb1rw9XjagrZOqSVZ7HQ_TKt")
+bmiwomen<-read_csv("https://drive.google.com/uc?export=download&id=15XtsudhnN62T2wvxdiAna_aIlma1WIIL")
+calories<-read_csv("https://drive.google.com/uc?export=download&id=1hxqzdnwvUVrN9ttGZ1EysbozXkJdJFKz")
+money<-read_csv("https://drive.google.com/uc?export=download&id=1P95ZaNtcXY0YzFvclN0CRrm_xAi-Afsd")
+bpm1 <- bpmen %>% pivot_longer(!country, names_to = "year", values_to = "BP_Men")
+bpw1 <- bpwomen %>% pivot_longer(!country, names_to = "year", values_to = "BP_Women")
+bmiw <- bmiwomen %>% pivot_longer(!country, names_to = "year", values_to = "BMI_women")
+bmim <- bmimen %>% pivot_longer(!country, names_to = "year", values_to = "BMI_men")
+kcal <- calories %>% pivot_longer(!country, names_to = "year", values_to = "Calories")
+spending <- money %>% pivot_longer(!country, names_to = "year", values_to = "Universal_Healthcare")
+c1 <- full_join(bmim, bmiw) 
+c2 <- full_join(c1, bpm1)
+c3 <- full_join(c2, bpw1)
+c4 <- full_join(c3, kcal)
+healthy <- full_join(c4, spending)
+head(healthy)
+```
+
+```{r}
+northamerica <- healthy %>% filter(country == c("Antigua and Barbuda", "Bahamas", "Bermuda", "Belize", "Canada", "Costa Rica", "Cuba", "Dominica", "Dominican Republic", "El Salvador", "Grenada", "Guatemala", "Haiti", "Honduras", "Jamaica", "Mexico", "Nicaragua", "Panama","St. Kitts and Nevis ", "St. Lucia", "St. Vincent and the Grenadines", "Trinidad and Tobago", "United States")) %>% mutate(country = "North America")
+
+southamerica <- healthy %>% filter(country == c("Equatorial Guinea", "Argentina", "Ecuador", "Bolivia", "Brazil", "Chile", "Colombia", "Guyana", "Paraguay", "Peru", "Suriname", "Uruguay", "Venezuela")) %>% mutate(country = "South America") 
+
+europe <- healthy %>% filter(country == c("Albania", "Andorra", "Armenia", "Austria", "Azerbaijan", "Belarus", "Belgium", "Bosnia and Herzegovina", "Bulgaria", "Croatia", "Cyprus", "Czechia", "Denmark", "Estonia", "Finland", "France", "Georgia", "Germany", "Greece", "Hungary", "Ireland", "Iceland", "Italy", "Kazakhstan", "Kosovo", "Latvia", "Liechtenstein", "Lithuania", "Luxembourg", "Malta", "Moldova", "Monaco", "Montenegro", "Netherlands", "North Macedonia", "Norway", "Portugal", "Poland", "San Marino", "Serbia", "Slovakia", "Slovenia", "Spain", "Sweeden", "Switzerland", "Turkey", "Ukrain", "United Kingdom")) %>% mutate(country = "Europe")
+
+africa <- healthy %>% filter(country ==c("Algeria", "Angola Benin", "Botswana", "Burkina Faso", "Benin", "Cameroon", "Central African Republic", "Chad", "Comoros", "Congo", "Cote d'Ivoire", "Congo, Rep.", "Djibouti", "Egypt", "Eswatini", "Ethiopia", "Gabon", "Gambia", "Ghana", "Guinea","Guinea-Bissau", "Kenya", "Lesotho", "Liberia", "Madagascar", "Malawi", "Mali", "Mauritania", "Mauritius", "Morocco", "Namibia", "Niger", "Nigeria", "Rwanda", "Sao Tome and Principe", "Senegal","Sierra Leone", "Somalia", "South Africa", "Sudan", "Tanzania", "Togo", "Tunisia", "Uganda", "Zambia","Zimbabwe", "Mozambique")) %>% mutate(country = "Africa")
+                                      
+asia <- healthy %>% filter(country == c("Afghanistan", "Armenia", "Azerbaijan", "Bahrain", "Bangladesh", "Bhutan", "Brunei", "Cambodia", 
+"China", "Cyprus", "Georgia", "India", "Indonesia", "Iran", "Iraq", "Israel", "Japan", "Jordan", "Kazakhstan", "Kuwait", "Kyrgyzstan", "Laos", "Lebanon", "Malaysia", "Maldives", "Mongolia", "Myanmar", "Nepal", "North Korea", "Oman", "Pakistan", "Palestine", 
+"Philippines", "Qatar", "Russia", "Saudi Arabia", "Singapore", "South Korea", "Sri Lanka", "Syria", "Taiwan", "Tajikistan", "Thailand", 
+"Timor-Leste", "Turkey", "Turkmenistan", "United Arab Emirates", "Uzbekistan", "Vietnam", "Yemen")) %>% mutate(country = "Asia")
+
+c1 <- full_join(europe, southamerica)
+c2 <- full_join(c1, northamerica)
+c3 <- full_join(c2, africa)
+countries <- full_join(c3,asia)
+healthy <- healthy %>% drop_na()
+countries <- countries %>% drop_na()
+head(countries)
+```
+###MANOVA 
+
+```{r cars}
+bpm <- healthy$BP_Men
+bmi <- healthy$BMI_men
+res.man <- manova(cbind(BP_Men, BMI_men, BMI_women, BP_Women, Calories) ~ Universal_Healthcare, data = healthy)
+summary(res.man)
+```
+
+```{r pressure, echo=FALSE}
+summary.aov(res.man)
+```
+```{r}
+countries%>%group_by(country)%>%summarize(mean(BP_Men),mean(BMI_men),mean(BMI_women), mean(BP_Women), mean(Calories))
+```
+
+```{r}
+covmats<-countries%>%group_by(country)%>%do(covs=cov(.[3:7]))
+for(i in 1:3){print(as.character(covmats$country[i])); print(covmats$covs[[i]])}
+```
+
+```{r}
+pairwise.t.test(countries$BP_Women, countries$country, p.adj="none")
+```
+
+```{r}
+pairwise.t.test(countries$BP_Women, countries$country, p.adj="bonf")
+```
+
+```{r}
+pairwise.t.test(countries$BMI_women, countries$country, p.adj="none")
+```
+
+```{r}
+pairwise.t.test(countries$BMI_women, countries$country, p.adj="bonf")
+```
+
+```{r}
+# all variables differed from each other 
+.05/8
+# bonferroni correction of 0.0005813953
+.05^8
+```
+```{r}
+ggplot(countries, aes(x = BMI_women, y = BP_Women)) + geom_point() + geom_density_2d() +facet_wrap(~country)+ggtitle("Plot 1")
+```
+```{r}
+ggplot(countries, aes(x = BMI_men, y = BP_Men)) + geom_point() + geom_density_2d() +facet_wrap(~country)+ggtitle("Plot 2")
+
+
+```
+### MANOVA Analysis 
+###### A MANOVA was conducted to find the effect of having (or not) universal healthcare on five dependent variables (BMI and blood pressure on men and women, respectively, and the average calories per capita). After this test was done. Blood pressure and BMI for women were chosen as the variables to focus on for clarity. significance is determined based on the bonferoni correction (.00058).
+
+###### There was a significant difference among the presence of universal healthcare for one of the dependent variables pillai trace = 4.283,F= 144.51, p<.0001. The null hypothesis is rejected. 
+
+###### The assumption of normality was not met due to the non standard distribution in the plots 1 and 2. When testing homogenity and covaraiances, all lot of the varaibles varied greatly, but specifically the continent of Africa. Univariate ANOVAs were then run. 
+###### A total of 8 tests were run: 1 MANOVA, 5 ANOVA and 2 t-tests.  
+
+###### An ANOVA was run for the dependent variables after the MANOVA with values of F=195.01 p<.0001, F=311.24 p<.0001, 195.87 p<.0001, F=105.8 p<.0001, and F=213.68 p<.0001 respectively for BP and BMI of men then BP and BMI for women and calories. Since the F value is so large and the p value is so low that means there is a significance between and within variables. This makes sense because the data are diverse. 
+
+###### A post hoc analysis was performed conducting pairwise t tests and then pairwise tests with a bonferroi correction to compare against. This was done for BMI and BP of women to determine if a particular dependent variable was very different across continents for the presence of universal healthcare. Many of the tests found a significant difference across continents. Africa and Europe, Asia and Europe, both Americas and Asia, as well as South America and Asia has no significant difference for BP. BMI saw no significant difference for Europe and Aia, both Americas and Asia, as well as South America and Asia Asia,  
+
+###### 0.05/8 = 0.00625 for the new a value in the bonferroni correction. This indicates and type I error rate of 3.9e^-11.
+
+
+### Randomized PERMANOVA
+```{r}
+set.seed(123)
+data_1 <- countries %>% na.omit()
+data_1$Universal_Healthcare <- as.numeric(data_1$Universal_Healthcare)
+dist <- data_1%>%select(BP_Women, BMI_women) %>%dist()
+adonis(dist~country,data=data_1)
+adonis(dist~Universal_Healthcare,data=data_1)
+```
+
+```{r}
+ggplot(data=NULL, aes(dist)) + geom_histogram(bins=30, color="pink", fill="light blue") + geom_vline(xintercept = quantile(dist,0.95), colour = "red")+ggtitle("Plot 3") +scale_fill_brewer(palette = "pastel12") + scale_y_continuous("dist")
+```
+## Randomization Test PERMANOVA 
+###### A PERMANOVA test was done for the randomization test for this analysis. The effect of BMI on men and women was chosen as the two variables over a period of time from 1980 to 2008 by the continents.The null hypothesis for a PERMANOVA is that the multivariate means of all groups are equal. The alternative hypothesis is that the multivariate means of all groups are not equal.The PERMANOVA is using the adonis function with 999 permutations and resulted in F = 19.221 and p = 0.001, indicating that the null hypothesis can be rejected and that the meultivariate means between groups are not equal.
+
+###Linear Regression
+
+```{R}
+womenBP <- countries$BP_Women - mean(countries$BP_Women,na.rm=T)
+
+lmfit <- lm(BMI_women~BP_Women*Universal_Healthcare, data=countries)
+summary(lmfit)
+```
+
+```{r}
+lm_resid <- lmfit$residuals; lm_fitvals <- lmfit$fitted.values
+ggplot()+geom_point(aes(lm_fitvals,lm_resid))+geom_hline(yintercept=0, color=
+"pink")+ggtitle("Plot 4")
+```
+
+```{r}
+ggplot()+geom_histogram(aes(lm_resid),bins=20, color="pink", fill="light blue")+ggtitle("Plot 5")
+```
+
+```{r}
+ggplot(countries, aes(BP_Women, BMI_women, color=Universal_Healthcare)) + geom_point() + geom_smooth(method="lm", se=FALSE, fullrange=TRUE, color="red")+ggtitle("Plot 6")
+```
+
+```{r}
+coeftest(lmfit, vcov. = vcovHC(lmfit))
+```
+### Linear Regression 
+###### A linear regression was run when predicting the BMI of Women in countries of the world that do or do not have a universal healthcare system from the blood pressure and the interaction between the two variables. The assumptions of linearity and homoskedasticity appear to not be adequately met in plot 4. In plot 6 normality also is not met. The intercept of the model indicates the predicted average BMI of women is 23.775kg.
+
+######In countries without a universal healthcare system there was a decrease in predicted BMI by .0448kg. With a universal healthcare system there is an increase of 1.478 kg. this is a significant test (t=78.364, p<0.0001).In countries with a universal healthcare system the BMI for an average woman in that country is significant as well (t=3.2358, p=0.0016). The slope for Blood Pressure to BMI is lowering for places without a universal healthcare system by .004 but is not significant with a t value of -0.0313 and a p value of 0.975. 
+
+###### The R sqared value explains the proportion of variance. (0.1286)
+######The regression was recomputed with robust standard errors. In the case of both variables and the interaction, the standard error decreased. BP is a good predictor of BMI because p<0.0001 and the presence of absence of a universal healthcare system was a good predictor of BMI because p=0.0016. The interaction between BP and presence of a universal healthcare system was not significant (p=.97). 
+
+###Bootstrapping 
+```{r}
+fit<-lm(Universal_Healthcare~BP_Women+BMI_women, countries) #fit model
+resids<-fit$residuals #save residuals
+fitted<-fit$fitted.values
+
+resid_resamp<-replicate(5000,{
+new_resids<-sample(resids,replace=TRUE) #resample resids w/ replacement
+countries$Universal_Healthcare<-fitted+new_resids #add new resids to yhats to get new "data"
+fit<-lm(Universal_Healthcare~BP_Women+BMI_women,data=countries) #refit model
+coef(fit) #save coefficient estimates (b0, b1, etc)
+})
+
+set.seed(123)
+
+samp_vec<-replicate(5000, {
+boot_dat <- sample_frac(countries, replace=T)
+boot_fit <- lm(BP_Women~BMI_women*Universal_Healthcare, data=boot_dat)
+coef(boot_fit)
+})
+
+samp_vec %>% t %>% as.data.frame %>% summarize_all(sd)
+```
+
+```{r}
+samp_vec %>% t %>% as.data.frame %>% gather %>% group_by(key) %>% 
+  summarize(lower=quantile(value,.025), upper=quantile(value,.975))
+```
+###### This shows the bootstapped linear regression run above. I used a sample of 5000. The difference in standard error was much greater when bootstrapped (119 instead of robust= 29). 
+
+###Logistic Regression
+
+```{r}
+log_fit <-glm(Universal_Healthcare~BMI_women+BP_Women,data=data_1,family="binomial")
+summary(log_fit)
+```
+```{r}
+exp(coef(log_fit))
+```
+```{r}
+log_probs <- predict(log_fit, type="response")
+log_preds <- ifelse(log_probs>.5,1,0)
+table(prediction=log_preds, truth=data_1$Universal_Healthcare)%>%addmargins
+```
+```{r}
+(20+63)/112
+```
+```{r}
+63/69
+```
+```{r}
+20/43
+```
+```{r}
+63/86
+```
+
+```{r}
+data_1$logit<-predict(log_fit,type = "link")
+data_1<-data_1%>%mutate(Universal_Healthcare2=as.character(Universal_Healthcare))
+data_1%>%ggplot()+geom_density(aes(logit,color = Universal_Healthcare2,fill = Universal_Healthcare2), alpha=0.5)+ggtitle("Plot 8")
+```
+```{r}
+
+ROCplot<-ggplot(data_1)+
+  geom_roc(aes(d=Universal_Healthcare,m=log_probs),n.cuts=0)+
+  ggtitle("Plot 9")
+ROCplot
+
+```
+```{r}
+calc_auc(ROCplot)
+```
+
+```{r}
+class_diag <- function(probs,truth){
+  tab<-table(factor(probs>.5,levels=c("FALSE","TRUE")),truth)
+  acc=sum(diag(tab))/sum(tab)
+  sens=tab[2,2]/colSums(tab)[2]
+  spec=tab[1,1]/colSums(tab)[1]
+  ppv=tab[2,2]/rowSums(tab)[2]
+  if(is.numeric(truth)==FALSE & is.logical(truth)==FALSE) truth<-as.numeric(truth)-1
+  ord<-order(probs, decreasing=TRUE)
+  probs <- probs[ord]; truth <- truth[ord]
+  TPR=cumsum(truth)/max(1,sum(truth)) 
+  FPR=cumsum(!truth)/max(1,sum(!truth))
+  dup<-c(probs[-1]>=probs[-length(probs)], FALSE)
+  TPR<-c(0,TPR[!dup],1); FPR<-c(0,FPR[!dup],1)
+  n <- length(TPR)
+  auc<- sum( ((TPR[-1]+TPR[-n])/2) * (FPR[-1]-FPR[-n]) )
+
+  data.frame(acc,sens,spec,ppv,auc)
+}
+
+```
+
+```{r}
+#10 Fold Cross Validation
+set.seed(123)
+k=6
+cv_data <- data_1[sample(nrow(data_1)),]
+folds <- cut(seq(1:nrow(data_1)),breaks=k,labels=F)
+
+
+diags<-NULL
+for(i in 1:k){
+  train<-data_1[folds!=i, ]
+  test<-data_1[folds == i, ]
+  truth<-test$Universal_Healthcare
+  
+  cv_fit<-glm(Universal_Healthcare~BMI_women+BP_Women, data=data_1, family="binomial")
+  cv_probs<-predict(cv_fit,newdata=test,type="response")
+  diags<-rbind(diags,class_diag(cv_probs,truth))
+  ##PROBLEM HERE^, possible to be a problem with first line of class_diag function, check the one he gave y'all this year
+}
+summarize_all(diags, mean)
+```
+
+### Logistic Regression Discussion 
+###### A logistic regression was run to predict if the presence of universal healthcare from BMI and BP of women. The model predicted that the absence of universal healthcare and holding BMI increased the blood pressure of women 0.99 and increased the BMI of women 1.44kg when blood pressure was held. This finding is significant only for blood pressure. (z=3.417 p=0.000633)
+
+###### A confusion matrix was also created with the predicted values from te logistic regression above. Accuracy is predicted at .73, sensitivity is .844, specificity is .289, the precision is .665
+
+###### Plot 8 is a density plot that represents presence (1) and absence (0) of a universal healthcare plan. The AUC of plot 9 is .681 that indicates poor predictions of the model. 
+
+##LASSO Regression 
+```{r}
+###LASSO Regression
+y<-as.matrix(data_1$Universal_Healthcare)
+x<-model.matrix(Universal_Healthcare~BMI_women+BP_Women,data=data_1)[,-1]
+x<-scale(x)
+cv<-cv.glmnet(x,y,family="binomial")
+lasso<-glmnet(x,y,family="binomial",lambda=cv$lambda.1se)
+coef(lasso)
+###LASSO CV
+set.seed(123)
+k=6
+cvlass_data <- data_1[sample(nrow(data_1)),]
+folds <- cut(seq(1:nrow(data_1)),breaks=k,labels=F)
+
+diags<-NULL 
+for(i in 1:k){
+  train<-data_1[folds!=i,]
+  test<-data_1[folds==i,]
+  truth<-test$Universal_Healthcare
+  
+  cvlass_fit<-glm(Universal_Healthcare~BMI_women+BP_Women,data=data_1, family="binomial")
+  cvlass_probs<-predict(cvlass_fit,newdata=test,type="response")
+  diags<-rbind(diags,class_diag(cvlass_probs,truth))
+}
+#10 Fold CV Findings
+summarize_all(diags, mean)
+```
+### LASSO
+###### The LASSO model predicts the healthcare model from BMI and blood pressure of women in that country. The predictor variable retained is BMI of women and was found to be a sO = 0.22 which is small. A 10 fold cross validation was conducted in the LASSO model. The accuracy is .73 which was the same as the logistic regression accuracy. 
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

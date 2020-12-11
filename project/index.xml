@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Projects on Logan Shiller</title>
+    <link>/project/</link>
+    <description>Recent content in Projects on Logan Shiller</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language>
+    <lastBuildDate>Thu, 10 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="/project/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Welcome</title>
+      <link>/project/welcome/</link>
+      <pubDate>Thu, 10 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/project/welcome/</guid>
+      <description>About me I am a soon to be graduate of UT. Clearly, I am very excited about the whole thing.I thought it would be fun to share a recipe that I recently tried. My all time favorite food is probably mac and cheese. Using r I have calcualted the metric measurements for ingredients and using python I have shown how the two can &amp;quot;talk&amp;quot; to eachother!  Ingredients Unexpected cheddar(1/4 of the block, grated) - Trader Joes  6 oz mexican blend shredded cheese  1/8 c flour  1/8 c butter  2 c milk  1/4 tsp each salt,pepper,red pepper flakes, paprika  1/2 tbsp minced garlic  4 oz diced onion or shallot  half a box (8 oz) of your favorite noodle.</description>
+    </item>
+    
+    <item>
+      <title>Project 1</title>
+      <link>/project/project1/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/project/project1/</guid>
+      <description>In this analysis, data from World Health was used to compare the BMI of men and women, the Blood Pressure of men and women, the calories consumed in a day, and the percentage of a country&#39;s budget allocated to healthcare.  These datasets share the categorical variable &amp;quot;countries&amp;quot; and &amp;quot;year&amp;quot;.  This data is interesting because I think that it can paint an interesting picture about overall health in different countries around the world.</description>
+    </item>
+    
+    <item>
+      <title>Project 2</title>
+      <link>/project/project2/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/project/project2/</guid>
+      <description>For this project I used most of the same data from the previous project which was created by World Health. I have data that describes all of the countries in the world. The variables are BMI and Blood Pressure for men and women, whether or not the country of question has a universal health care system, and average number of calories eaten per capita/day. There are data ranging from 1980-2008 and I have made subsets of these countries by continent for easier viewing because often having over 200 different variables leads to incoherent statistics.</description>
+    </item>
+    
+  </channel>
+</rss>

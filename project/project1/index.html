@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Logan Shiller" />
+    
+    <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.ico">
+    <title>Project 1</title>
+    <meta name="generator" content="Hugo 0.79.0" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="../../css/main.css" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,200bold,400old" />
+    
+    <!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+
+    
+  </head>
+
+  <body>
+    <div id="wrap">
+      
+      <nav class="navbar navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="../../"><i class="fa fa-home"></i></a>
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div class="navbar-collapse collapse" id="navbar">
+      <ul class="nav navbar-nav navbar-right">
+      
+        
+        <li><a href="../../post/">BLOG</a></li>
+        
+        <li><a href="../../projects/">PROJECTS</a></li>
+        
+        <li><a href="../../resume/">RESUME</a></li>
+        
+      
+      </ul>
+    </div>
+  </div>
+</nav>
+
+      <div class="container">
+        <div class="blog-post">
+          <h3>
+            <strong><a href="../../project/project1/">Project 1</a></strong>
+          </h3>
+        </div>
+ 
+<div class="blog-title">
+          <h4>
+         January 1, 0001 
+            &nbsp;&nbsp;
+            
+          </h4>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="blogpost">
+              
+
+
+<div id="in-this-analysis-data-from-world-health-was-used-to-compare-the-bmi-of-men-and-women-the-blood-pressure-of-men-and-women-the-calories-consumed-in-a-day-and-the-percentage-of-a-countrys-budget-allocated-to-healthcare." class="section level6">
+<h6>In this analysis, data from World Health was used to compare the BMI of men and women, the Blood Pressure of men and women, the calories consumed in a day, and the percentage of a country's budget allocated to healthcare.</h6>
+</div>
+<div id="these-datasets-share-the-categorical-variable-countries-and-year." class="section level6">
+<h6>These datasets share the categorical variable &quot;countries&quot; and &quot;year&quot;.</h6>
+</div>
+<div id="this-data-is-interesting-because-i-think-that-it-can-paint-an-interesting-picture-about-overall-health-in-different-countries-around-the-world.-through-the-lens-of-corona-virus-world-health-has-become-more-mainstream-and-relevant-to-everyday-life.-i-think-and-hope-that-public-health-will-become-a-more-normalized-part-of-everyday-curriculum-and-news." class="section level6">
+<h6>This data is interesting because I think that it can paint an interesting picture about overall health in different countries around the world. Through the lens of corona virus, world health has become more mainstream and relevant to everyday life. I think and hope that public health will become a more normalized part of everyday curriculum and news.</h6>
+</div>
+<div id="tidying-and-joining" class="section level4">
+<h4>Tidying and Joining</h4>
+<div id="all-6-of-the-datasets-needed-tidying.-i-could-not-join-them-until-they-had-been-pivoted.-it-was-pretty-standard-overall.-the-names-of-columns-were-very-standard-and-should-be-easy-to-extrapolate-the-meaning.-for-example-bmi_men-is-the-average-bmi-for-men-in-tht-country-and-year." class="section level6">
+<h6>All 6 of the datasets needed tidying. I could not join them until they had been pivoted. It was pretty standard overall. The names of columns were very standard and should be easy to extrapolate the meaning. For example: BMI_men is the average BMI for men in tht country and year.</h6>
+<pre class="r"><code>bpm1 &lt;- bpmen %&gt;% pivot_longer(!country, names_to = &quot;year&quot;, values_to = &quot;BP_Men&quot;)
+bpw1 &lt;- bpwomen %&gt;% pivot_longer(!country, names_to = &quot;year&quot;, values_to = &quot;BP_Women&quot;)
+bmiw &lt;- bmiwomen %&gt;% pivot_longer(!country, names_to = &quot;year&quot;, values_to = &quot;BMI_women&quot;)
+bmim &lt;- bmimen %&gt;% pivot_longer(!country, names_to = &quot;year&quot;, values_to = &quot;BMI_men&quot;)
+kcal &lt;- calories %&gt;% pivot_longer(!country, names_to = &quot;year&quot;, values_to = &quot;Calories&quot;)
+spending &lt;- money %&gt;% pivot_longer(!country, names_to = &quot;year&quot;, values_to = &quot;Budget_Healthcare&quot;)</code></pre>
+<pre class="r"><code>c1 &lt;- full_join(bmim, bmiw) </code></pre>
+<pre><code>## Joining, by = c(&quot;country&quot;, &quot;year&quot;)</code></pre>
+<pre class="r"><code>c2 &lt;- full_join(c1, bpm1)</code></pre>
+<pre><code>## Joining, by = c(&quot;country&quot;, &quot;year&quot;)</code></pre>
+<pre class="r"><code>c3 &lt;- full_join(c2, bpw1)</code></pre>
+<pre><code>## Joining, by = c(&quot;country&quot;, &quot;year&quot;)</code></pre>
+<pre class="r"><code>c4 &lt;- full_join(c3, kcal)</code></pre>
+<pre><code>## Joining, by = c(&quot;country&quot;, &quot;year&quot;)</code></pre>
+<pre class="r"><code>healthy &lt;- full_join(c4, spending)</code></pre>
+<pre><code>## Joining, by = c(&quot;country&quot;, &quot;year&quot;)</code></pre>
+<pre class="r"><code>head(healthy)</code></pre>
+<pre><code>## # A tibble: 6 x 8
+##   country     year  BMI_men BMI_women BP_Men BP_Women Calories Budget_Healthcare
+##   &lt;chr&gt;       &lt;chr&gt;   &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;             &lt;dbl&gt;
+## 1 Afghanistan 1980     21.5      20.4    125      122     2480                NA
+## 2 Afghanistan 1981     21.5      20.5    125      122     2480                NA
+## 3 Afghanistan 1982     21.4      20.5    125      123     2480                NA
+## 4 Afghanistan 1983     21.4      20.6    125      123     2520                NA
+## 5 Afghanistan 1984     21.4      20.6    125      123     2450                NA
+## 6 Afghanistan 1985     21.4      20.6    125      123     2400                NA</code></pre>
+</div>
+<div id="i-found-6-dataframes-that-shared-years-spanning-1980-to-2008-and-also-shared-a-list-of-most-of-the-countries-in-the-world.-i-had-to-pivot_longer-the-data-individually-before-joining-them.-i-joined-them-all-in-steps-to-make-sure-that-i-was-visualizing-it-properly.-i-chose-full_join-because-the-data-shared-pretty-much-all-of-the-same-variables-but-had-different-numeric-values.-no-observations-were-dropped.-there-are-now-9601-observations.-previously-there-were-189-observations-in-both-blood-pressure-sets-and-both-bmi-sets.-there-were-168-and-190-observations-for-the-food-supply-and-government-spending-on-health-care-respectively." class="section level6">
+<h6>I found 6 dataframes that shared years spanning 1980 to 2008 and also shared a list of most of the countries in the world. I had to pivot_longer the data individually before joining them. I joined them all in steps, to make sure that I was visualizing it properly. I chose full_join because the data shared pretty much all of the same variables but had different numeric values. No observations were dropped. There are now 9601 observations. Previously, there were 189 observations in both blood pressure sets and both BMI sets. There were 168 and 190 observations for the food supply and government spending on health care, respectively.</h6>
+</div>
+</div>
+<div id="wrangling" class="section level4">
+<h4>Wrangling</h4>
+<pre class="r"><code>healthy %&gt;% select(country, BP_Men) %&gt;% arrange(BP_Men &gt; 120)</code></pre>
+<pre><code>## # A tibble: 9,601 x 2
+##    country  BP_Men
+##    &lt;chr&gt;     &lt;dbl&gt;
+##  1 Cambodia    119
+##  2 Cambodia    119
+##  3 Cambodia    119
+##  4 Cambodia    119
+##  5 Cambodia    119
+##  6 Cambodia    119
+##  7 Cambodia    120
+##  8 Cambodia    120
+##  9 Cambodia    120
+## 10 Cambodia    120
+## # … with 9,591 more rows</code></pre>
+<pre class="r"><code>healthy %&gt;% select(country, BP_Men) %&gt;% arrange(BP_Men &lt; 120)</code></pre>
+<pre><code>## # A tibble: 9,601 x 2
+##    country     BP_Men
+##    &lt;chr&gt;        &lt;dbl&gt;
+##  1 Afghanistan    125
+##  2 Afghanistan    125
+##  3 Afghanistan    125
+##  4 Afghanistan    125
+##  5 Afghanistan    125
+##  6 Afghanistan    125
+##  7 Afghanistan    125
+##  8 Afghanistan    125
+##  9 Afghanistan    125
+## 10 Afghanistan    125
+## # … with 9,591 more rows</code></pre>
+<pre class="r"><code>northamerica &lt;- healthy %&gt;% filter(country == c(&quot;Antigua and Barbuda&quot;, &quot;Bahamas&quot;, &quot;Bermuda&quot;, &quot;Belize&quot;, &quot;Canada&quot;, &quot;Costa Rica&quot;, &quot;Cuba&quot;, &quot;Dominica&quot;, &quot;Dominican Republic&quot;, &quot;El Salvador&quot;, &quot;Grenada&quot;, &quot;Guatemala&quot;, &quot;Haiti&quot;, &quot;Honduras&quot;, &quot;Jamaica&quot;, &quot;Mexico&quot;, &quot;Nicaragua&quot;, &quot;Panama&quot;,&quot;St. Kitts and Nevis &quot;, &quot;St. Lucia&quot;, &quot;St. Vincent and the Grenadines&quot;, &quot;Trinidad and Tobago&quot;, &quot;United States&quot;)) %&gt;% mutate(country = &quot;North America&quot;)</code></pre>
+<pre><code>## Warning in country == c(&quot;Antigua and Barbuda&quot;, &quot;Bahamas&quot;, &quot;Bermuda&quot;, &quot;Belize&quot;, :
+## longer object length is not a multiple of shorter object length</code></pre>
+<pre class="r"><code>southamerica &lt;- healthy %&gt;% filter(country == c(&quot;Equatorial Guinea&quot;, &quot;Argentina&quot;, &quot;Ecuador&quot;, &quot;Bolivia&quot;, &quot;Brazil&quot;, &quot;Chile&quot;, &quot;Colombia&quot;, &quot;Guyana&quot;, &quot;Paraguay&quot;, &quot;Peru&quot;, &quot;Suriname&quot;, &quot;Uruguay&quot;, &quot;Venezuela&quot;)) %&gt;% mutate(country = &quot;South America&quot;) </code></pre>
+<pre><code>## Warning in country == c(&quot;Equatorial Guinea&quot;, &quot;Argentina&quot;, &quot;Ecuador&quot;,
+## &quot;Bolivia&quot;, : longer object length is not a multiple of shorter object length</code></pre>
+<pre class="r"><code>europe &lt;- healthy %&gt;% filter(country == c(&quot;Albania&quot;, &quot;Andorra&quot;, &quot;Armenia&quot;, &quot;Austria&quot;, &quot;Azerbaijan&quot;, &quot;Belarus&quot;, &quot;Belgium&quot;, &quot;Bosnia and Herzegovina&quot;, &quot;Bulgaria&quot;, &quot;Croatia&quot;, &quot;Cyprus&quot;, &quot;Czechia&quot;, &quot;Denmark&quot;, &quot;Estonia&quot;, &quot;Finland&quot;, &quot;France&quot;, &quot;Georgia&quot;, &quot;Germany&quot;, &quot;Greece&quot;, &quot;Hungary&quot;, &quot;Ireland&quot;, &quot;Iceland&quot;, &quot;Italy&quot;, &quot;Kazakhstan&quot;, &quot;Kosovo&quot;, &quot;Latvia&quot;, &quot;Liechtenstein&quot;, &quot;Lithuania&quot;, &quot;Luxembourg&quot;, &quot;Malta&quot;, &quot;Moldova&quot;, &quot;Monaco&quot;, &quot;Montenegro&quot;, &quot;Netherlands&quot;, &quot;North Macedonia&quot;, &quot;Norway&quot;, &quot;Portugal&quot;, &quot;Poland&quot;, &quot;San Marino&quot;, &quot;Serbia&quot;, &quot;Slovakia&quot;, &quot;Slovenia&quot;, &quot;Spain&quot;, &quot;Sweeden&quot;, &quot;Switzerland&quot;, &quot;Turkey&quot;, &quot;Ukrain&quot;, &quot;United Kingdom&quot;)) %&gt;% mutate(country = &quot;Europe&quot;)</code></pre>
+<pre><code>## Warning in country == c(&quot;Albania&quot;, &quot;Andorra&quot;, &quot;Armenia&quot;, &quot;Austria&quot;,
+## &quot;Azerbaijan&quot;, : longer object length is not a multiple of shorter object length</code></pre>
+<pre class="r"><code>africa &lt;- healthy %&gt;% filter(country ==c(&quot;Algeria&quot;, &quot;Angola Benin&quot;, &quot;Botswana&quot;, &quot;Burkina Faso&quot;, &quot;Benin&quot;, &quot;Cameroon&quot;, &quot;Central African Republic&quot;, &quot;Chad&quot;, &quot;Comoros&quot;, &quot;Congo&quot;, &quot;Cote d&#39;Ivoire&quot;, &quot;Congo, Rep.&quot;, &quot;Djibouti&quot;, &quot;Egypt&quot;, &quot;Eswatini&quot;, &quot;Ethiopia&quot;, &quot;Gabon&quot;, &quot;Gambia&quot;, &quot;Ghana&quot;, &quot;Guinea&quot;,&quot;Guinea-Bissau&quot;, &quot;Kenya&quot;, &quot;Lesotho&quot;, &quot;Liberia&quot;, &quot;Madagascar&quot;, &quot;Malawi&quot;, &quot;Mali&quot;, &quot;Mauritania&quot;, &quot;Mauritius&quot;, &quot;Morocco&quot;, &quot;Namibia&quot;, &quot;Niger&quot;, &quot;Nigeria&quot;, &quot;Rwanda&quot;, &quot;Sao Tome and Principe&quot;, &quot;Senegal&quot;,&quot;Sierra Leone&quot;, &quot;Somalia&quot;, &quot;South Africa&quot;, &quot;Sudan&quot;, &quot;Tanzania&quot;, &quot;Togo&quot;, &quot;Tunisia&quot;, &quot;Uganda&quot;, &quot;Zambia&quot;,&quot;Zimbabwe&quot;, &quot;Mozambique&quot;)) %&gt;% mutate(country = &quot;Africa&quot;)</code></pre>
+<pre><code>## Warning in country == c(&quot;Algeria&quot;, &quot;Angola Benin&quot;, &quot;Botswana&quot;, &quot;Burkina Faso&quot;, :
+## longer object length is not a multiple of shorter object length</code></pre>
+<pre class="r"><code>asia &lt;- healthy %&gt;% filter(country == c(&quot;Afghanistan&quot;, &quot;Armenia&quot;, &quot;Azerbaijan&quot;, &quot;Bahrain&quot;, &quot;Bangladesh&quot;, &quot;Bhutan&quot;, &quot;Brunei&quot;, &quot;Cambodia&quot;, 
+&quot;China&quot;, &quot;Cyprus&quot;, &quot;Georgia&quot;, &quot;India&quot;, &quot;Indonesia&quot;, &quot;Iran&quot;, &quot;Iraq&quot;, &quot;Israel&quot;, &quot;Japan&quot;, &quot;Jordan&quot;, &quot;Kazakhstan&quot;, &quot;Kuwait&quot;, &quot;Kyrgyzstan&quot;, &quot;Laos&quot;, &quot;Lebanon&quot;, &quot;Malaysia&quot;, &quot;Maldives&quot;, &quot;Mongolia&quot;, &quot;Myanmar&quot;, &quot;Nepal&quot;, &quot;North Korea&quot;, &quot;Oman&quot;, &quot;Pakistan&quot;, &quot;Palestine&quot;, 
+&quot;Philippines&quot;, &quot;Qatar&quot;, &quot;Russia&quot;, &quot;Saudi Arabia&quot;, &quot;Singapore&quot;, &quot;South Korea&quot;, &quot;Sri Lanka&quot;, &quot;Syria&quot;, &quot;Taiwan&quot;, &quot;Tajikistan&quot;, &quot;Thailand&quot;, 
+&quot;Timor-Leste&quot;, &quot;Turkey&quot;, &quot;Turkmenistan&quot;, &quot;United Arab Emirates&quot;, &quot;Uzbekistan&quot;, &quot;Vietnam&quot;, &quot;Yemen&quot;)) %&gt;% mutate(country = &quot;Asia&quot;)</code></pre>
+<pre><code>## Warning in country == c(&quot;Afghanistan&quot;, &quot;Armenia&quot;, &quot;Azerbaijan&quot;, &quot;Bahrain&quot;, :
+## longer object length is not a multiple of shorter object length</code></pre>
+<pre class="r"><code>c1 &lt;- full_join(europe, southamerica)</code></pre>
+<pre><code>## Joining, by = c(&quot;country&quot;, &quot;year&quot;, &quot;BMI_men&quot;, &quot;BMI_women&quot;, &quot;BP_Men&quot;, &quot;BP_Women&quot;, &quot;Calories&quot;, &quot;Budget_Healthcare&quot;)</code></pre>
+<pre class="r"><code>c2 &lt;- full_join(c1, northamerica)</code></pre>
+<pre><code>## Joining, by = c(&quot;country&quot;, &quot;year&quot;, &quot;BMI_men&quot;, &quot;BMI_women&quot;, &quot;BP_Men&quot;, &quot;BP_Women&quot;, &quot;Calories&quot;, &quot;Budget_Healthcare&quot;)</code></pre>
+<pre class="r"><code>c3 &lt;- full_join(c2, africa)</code></pre>
+<pre><code>## Joining, by = c(&quot;country&quot;, &quot;year&quot;, &quot;BMI_men&quot;, &quot;BMI_women&quot;, &quot;BP_Men&quot;, &quot;BP_Women&quot;, &quot;Calories&quot;, &quot;Budget_Healthcare&quot;)</code></pre>
+<pre class="r"><code>countries &lt;- full_join(c3,asia)</code></pre>
+<pre><code>## Joining, by = c(&quot;country&quot;, &quot;year&quot;, &quot;BMI_men&quot;, &quot;BMI_women&quot;, &quot;BP_Men&quot;, &quot;BP_Women&quot;, &quot;Calories&quot;, &quot;Budget_Healthcare&quot;)</code></pre>
+<pre class="r"><code>head(countries)</code></pre>
+<pre><code>## # A tibble: 6 x 8
+##   country year  BMI_men BMI_women BP_Men BP_Women Calories Budget_Healthcare
+##   &lt;chr&gt;   &lt;chr&gt;   &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;             &lt;dbl&gt;
+## 1 Europe  1999     25.5      25.1    132      129     2800            0.0718
+## 2 Europe  1990     26.1      25.8    136      131       NA           NA     
+## 3 Europe  1982     24.6      26.3    135      132       NA           NA     
+## 4 Europe  1982     24.9      26.2    138      134       NA           NA     
+## 5 Europe  2002     26.3      25.1    131      125     3750            0.126 
+## 6 Europe  2002     25.8      26      132      133     2900            0.106</code></pre>
+<pre class="r"><code>healthy %&gt;% group_by(country, year, Calories) %&gt;% mutate(Calories = Calories/2000)</code></pre>
+<pre><code>## # A tibble: 9,601 x 8
+## # Groups:   country, year, Calories [9,601]
+##    country     year  BMI_men BMI_women BP_Men BP_Women Calories Budget_Healthca…
+##    &lt;chr&gt;       &lt;chr&gt;   &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;            &lt;dbl&gt;
+##  1 Afghanistan 1980     21.5      20.4    125      122     1.24               NA
+##  2 Afghanistan 1981     21.5      20.5    125      122     1.24               NA
+##  3 Afghanistan 1982     21.4      20.5    125      123     1.24               NA
+##  4 Afghanistan 1983     21.4      20.6    125      123     1.26               NA
+##  5 Afghanistan 1984     21.4      20.6    125      123     1.23               NA
+##  6 Afghanistan 1985     21.4      20.6    125      123     1.2                NA
+##  7 Afghanistan 1986     21.4      20.7    125      123     1.2                NA
+##  8 Afghanistan 1987     21.4      20.7    125      123     1.36               NA
+##  9 Afghanistan 1988     21.3      20.7    125      124     1.26               NA
+## 10 Afghanistan 1989     21.3      20.7    125      124     1.23               NA
+## # … with 9,591 more rows</code></pre>
+<pre class="r"><code>healthy &lt;- healthy %&gt;% drop_na()
+countries &lt;- countries %&gt;% drop_na()
+ 
+healthy %&gt;% group_by(country, BP_Men, BP_Women, BMI_men, BMI_women, Calories, Budget_Healthcare) %&gt;% summarize(n(), .groups=&quot;drop&quot;)</code></pre>
+<pre><code>## # A tibble: 2,287 x 8
+##    country     BP_Men BP_Women BMI_men BMI_women Calories Budget_Healthca… `n()`
+##    &lt;chr&gt;        &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;            &lt;dbl&gt; &lt;int&gt;
+##  1 Afghanistan    125      124    20.6      20.6     1830           0.0148     1
+##  2 Afghanistan    125      124    20.6      20.7     1890           0.0148     1
+##  3 Afghanistan    125      125    20.6      20.8     1950           0.0148     1
+##  4 Afghanistan    125      125    20.6      20.8     1970           0.0148     1
+##  5 Afghanistan    125      125    20.6      20.9     1970           0.0148     1
+##  6 Afghanistan    126      125    20.6      21       2050           0.0148     1
+##  7 Afghanistan    126      125    20.6      21.1     2040           0.0148     1
+##  8 Albania        132      129    25.3      24.9     2720           0.0526     1
+##  9 Albania        132      129    25.3      25       2730           0.0647     1
+## 10 Albania        132      129    25.3      25       2840           0.0634     1
+## # … with 2,277 more rows</code></pre>
+<pre class="r"><code>healthy %&gt;% group_by(country) %&gt;% summarize(mean(Calories, na.rm = TRUE),.groups=&quot;drop&quot;)</code></pre>
+<pre><code>## # A tibble: 167 x 2
+##    country             `mean(Calories, na.rm = TRUE)`
+##    &lt;chr&gt;                                        &lt;dbl&gt;
+##  1 Afghanistan                                  1957.
+##  2 Albania                                      2808.
+##  3 Algeria                                      2901.
+##  4 Angola                                       1920 
+##  5 Antigua and Barbuda                          2199.
+##  6 Argentina                                    3136.
+##  7 Armenia                                      2451.
+##  8 Australia                                    3089.
+##  9 Austria                                      3641.
+## 10 Azerbaijan                                   2491.
+## # … with 157 more rows</code></pre>
+<pre class="r"><code>healthy %&gt;% group_by(country) %&gt;% summarize(mean(BP_Men, na.rm = TRUE),.groups=&quot;drop&quot;)</code></pre>
+<pre><code>## # A tibble: 167 x 2
+##    country             `mean(BP_Men, na.rm = TRUE)`
+##    &lt;chr&gt;                                      &lt;dbl&gt;
+##  1 Afghanistan                                 125.
+##  2 Albania                                     133.
+##  3 Algeria                                     129.
+##  4 Angola                                      133.
+##  5 Antigua and Barbuda                         132.
+##  6 Argentina                                   127.
+##  7 Armenia                                     134.
+##  8 Australia                                   130.
+##  9 Austria                                     133.
+## 10 Azerbaijan                                  132.
+## # … with 157 more rows</code></pre>
+<pre class="r"><code>healthy %&gt;% group_by(country) %&gt;% summarize(mean(BP_Women, na.rm = TRUE),.groups=&quot;drop&quot;) </code></pre>
+<pre><code>## # A tibble: 167 x 2
+##    country             `mean(BP_Women, na.rm = TRUE)`
+##    &lt;chr&gt;                                        &lt;dbl&gt;
+##  1 Afghanistan                                   125.
+##  2 Albania                                       129 
+##  3 Algeria                                       130.
+##  4 Angola                                        130 
+##  5 Antigua and Barbuda                           125.
+##  6 Argentina                                     120.
+##  7 Armenia                                       133 
+##  8 Australia                                     121.
+##  9 Austria                                       126.
+## 10 Azerbaijan                                    129 
+## # … with 157 more rows</code></pre>
+<pre class="r"><code>healthy %&gt;% group_by(country) %&gt;% summarize(mean(BMI_men, na.rm = TRUE),.groups=&quot;drop&quot;)</code></pre>
+<pre><code>## # A tibble: 167 x 2
+##    country             `mean(BMI_men, na.rm = TRUE)`
+##    &lt;chr&gt;                                       &lt;dbl&gt;
+##  1 Afghanistan                                  20.6
+##  2 Albania                                      25.8
+##  3 Algeria                                      24.0
+##  4 Angola                                       21.6
+##  5 Antigua and Barbuda                          25.1
+##  6 Argentina                                    27.0
+##  7 Armenia                                      24.5
+##  8 Australia                                    26.9
+##  9 Austria                                      26  
+## 10 Azerbaijan                                   24.8
+## # … with 157 more rows</code></pre>
+<pre class="r"><code>healthy %&gt;% group_by(country) %&gt;% summarize(mean(BMI_women, na.rm = TRUE),.groups=&quot;drop&quot;)</code></pre>
+<pre><code>## # A tibble: 167 x 2
+##    country             `mean(BMI_women, na.rm = TRUE)`
+##    &lt;chr&gt;                                         &lt;dbl&gt;
+##  1 Afghanistan                                    20.8
+##  2 Albania                                        25.3
+##  3 Algeria                                        25.7
+##  4 Angola                                         22.2
+##  5 Antigua and Barbuda                            26.8
+##  6 Argentina                                      26.6
+##  7 Armenia                                        26.4
+##  8 Australia                                      26.2
+##  9 Austria                                        24.8
+## 10 Azerbaijan                                     26.7
+## # … with 157 more rows</code></pre>
+<pre class="r"><code>healthy %&gt;% group_by(country) %&gt;% summarize(mean(Budget_Healthcare, na.rm = TRUE),.groups=&quot;drop&quot;) </code></pre>
+<pre><code>## # A tibble: 167 x 2
+##    country             `mean(Budget_Healthcare, na.rm = TRUE)`
+##    &lt;chr&gt;                                                 &lt;dbl&gt;
+##  1 Afghanistan                                          0.0148
+##  2 Albania                                              0.0752
+##  3 Algeria                                              0.0895
+##  4 Angola                                               0.0434
+##  5 Antigua and Barbuda                                  0.107 
+##  6 Argentina                                            0.147 
+##  7 Armenia                                              0.0702
+##  8 Australia                                            0.156 
+##  9 Austria                                              0.146 
+## 10 Azerbaijan                                           0.0553
+## # … with 157 more rows</code></pre>
+<pre class="r"><code>healthy %&gt;% group_by(country) %&gt;% summarize(sd(Calories, na.rm = TRUE),.groups=&quot;drop&quot;)</code></pre>
+<pre><code>## # A tibble: 167 x 2
+##    country             `sd(Calories, na.rm = TRUE)`
+##    &lt;chr&gt;                                      &lt;dbl&gt;
+##  1 Afghanistan                                 78.0
+##  2 Albania                                     68.5
+##  3 Algeria                                    111. 
+##  4 Angola                                     185. 
+##  5 Antigua and Barbuda                        115. 
+##  6 Argentina                                   85.1
+##  7 Armenia                                    225. 
+##  8 Australia                                   64.6
+##  9 Austria                                     83.3
+## 10 Azerbaijan                                 362. 
+## # … with 157 more rows</code></pre>
+<pre class="r"><code>healthy %&gt;% group_by(country) %&gt;% summarize(sd(BP_Men, na.rm = TRUE),.groups=&quot;drop&quot;)</code></pre>
+<pre><code>## # A tibble: 167 x 2
+##    country             `sd(BP_Men, na.rm = TRUE)`
+##    &lt;chr&gt;                                    &lt;dbl&gt;
+##  1 Afghanistan                              0.488
+##  2 Albania                                  0.745
+##  3 Algeria                                  0.514
+##  4 Angola                                   0.535
+##  5 Antigua and Barbuda                      0.949
+##  6 Argentina                                0.611
+##  7 Armenia                                  0.469
+##  8 Australia                                1.64 
+##  9 Austria                                  0.929
+## 10 Azerbaijan                               0.519
+## # … with 157 more rows</code></pre>
+<pre class="r"><code>healthy %&gt;% group_by(country) %&gt;% summarize(sd(BP_Women, na.rm = TRUE),.groups=&quot;drop&quot;) </code></pre>
+<pre><code>## # A tibble: 167 x 2
+##    country             `sd(BP_Women, na.rm = TRUE)`
+##    &lt;chr&gt;                                      &lt;dbl&gt;
+##  1 Afghanistan                                0.488
+##  2 Albania                                    0    
+##  3 Algeria                                    0.514
+##  4 Angola                                     0    
+##  5 Antigua and Barbuda                        0.267
+##  6 Argentina                                  0.699
+##  7 Armenia                                    0    
+##  8 Australia                                  2.13 
+##  9 Austria                                    1.53 
+## 10 Azerbaijan                                 0.392
+## # … with 157 more rows</code></pre>
+<pre class="r"><code>healthy %&gt;% group_by(country) %&gt;% summarize(sd(BMI_men, na.rm = TRUE),.groups=&quot;drop&quot;)</code></pre>
+<pre><code>## # A tibble: 167 x 2
+##    country             `sd(BMI_men, na.rm = TRUE)`
+##    &lt;chr&gt;                                     &lt;dbl&gt;
+##  1 Afghanistan                               0    
+##  2 Albania                                   0.387
+##  3 Algeria                                   0.398
+##  4 Angola                                    0.352
+##  5 Antigua and Barbuda                       0.341
+##  6 Argentina                                 0.334
+##  7 Armenia                                   0.468
+##  8 Australia                                 0.417
+##  9 Austria                                   0.277
+## 10 Azerbaijan                                0.388
+## # … with 157 more rows</code></pre>
+<pre class="r"><code>healthy %&gt;% group_by(country) %&gt;% summarize(sd(BMI_women, na.rm = TRUE),.groups=&quot;drop&quot;) </code></pre>
+<pre><code>## # A tibble: 167 x 2
+##    country             `sd(BMI_women, na.rm = TRUE)`
+##    &lt;chr&gt;                                       &lt;dbl&gt;
+##  1 Afghanistan                                 0.172
+##  2 Albania                                     0.253
+##  3 Algeria                                     0.430
+##  4 Angola                                      0.714
+##  5 Antigua and Barbuda                         0.413
+##  6 Argentina                                   0.563
+##  7 Armenia                                     0.427
+##  8 Australia                                   0.464
+##  9 Austria                                     0.189
+## 10 Azerbaijan                                  0.426
+## # … with 157 more rows</code></pre>
+<pre class="r"><code>healthy %&gt;% group_by(country) %&gt;% summarize(sd(Budget_Healthcare, na.rm = TRUE),.groups=&quot;drop&quot;) </code></pre>
+<pre><code>## # A tibble: 167 x 2
+##    country             `sd(Budget_Healthcare, na.rm = TRUE)`
+##    &lt;chr&gt;                                               &lt;dbl&gt;
+##  1 Afghanistan                                       0      
+##  2 Albania                                           0.0130 
+##  3 Algeria                                           0.00816
+##  4 Angola                                            0.0141 
+##  5 Antigua and Barbuda                               0.0137 
+##  6 Argentina                                         0.00509
+##  7 Armenia                                           0.00945
+##  8 Australia                                         0.0127 
+##  9 Austria                                           0.0116 
+## 10 Azerbaijan                                        0.0127 
+## # … with 157 more rows</code></pre>
+<pre class="r"><code>healthy %&gt;% group_by(country) %&gt;% summarize(var(Calories, na.rm = TRUE),.groups=&quot;drop&quot;)</code></pre>
+<pre><code>## # A tibble: 167 x 2
+##    country             `var(Calories, na.rm = TRUE)`
+##    &lt;chr&gt;                                       &lt;dbl&gt;
+##  1 Afghanistan                                 6090.
+##  2 Albania                                     4695.
+##  3 Algeria                                    12413.
+##  4 Angola                                     34138.
+##  5 Antigua and Barbuda                        13284.
+##  6 Argentina                                   7242.
+##  7 Armenia                                    50607.
+##  8 Australia                                   4167.
+##  9 Austria                                     6936.
+## 10 Azerbaijan                                130859.
+## # … with 157 more rows</code></pre>
+<pre class="r"><code>healthy %&gt;% group_by(country) %&gt;% summarize(var(BP_Men, na.rm = TRUE),.groups=&quot;drop&quot;)</code></pre>
+<pre><code>## # A tibble: 167 x 2
+##    country             `var(BP_Men, na.rm = TRUE)`
+##    &lt;chr&gt;                                     &lt;dbl&gt;
+##  1 Afghanistan                               0.238
+##  2 Albania                                   0.555
+##  3 Algeria                                   0.264
+##  4 Angola                                    0.286
+##  5 Antigua and Barbuda                       0.901
+##  6 Argentina                                 0.374
+##  7 Armenia                                   0.220
+##  8 Australia                                 2.69 
+##  9 Austria                                   0.863
+## 10 Azerbaijan                                0.269
+## # … with 157 more rows</code></pre>
+<pre class="r"><code>healthy %&gt;% group_by(country) %&gt;% summarize(var(BP_Women, na.rm = TRUE),.groups=&quot;drop&quot;) </code></pre>
+<pre><code>## # A tibble: 167 x 2
+##    country             `var(BP_Women, na.rm = TRUE)`
+##    &lt;chr&gt;                                       &lt;dbl&gt;
+##  1 Afghanistan                                0.238 
+##  2 Albania                                    0     
+##  3 Algeria                                    0.264 
+##  4 Angola                                     0     
+##  5 Antigua and Barbuda                        0.0714
+##  6 Argentina                                  0.489 
+##  7 Armenia                                    0     
+##  8 Australia                                  4.53  
+##  9 Austria                                    2.34  
+## 10 Azerbaijan                                 0.154 
+## # … with 157 more rows</code></pre>
+<pre class="r"><code>healthy %&gt;% group_by(country) %&gt;% summarize(var(BMI_men, na.rm = TRUE),.groups=&quot;drop&quot;)</code></pre>
+<pre><code>## # A tibble: 167 x 2
+##    country             `var(BMI_men, na.rm = TRUE)`
+##    &lt;chr&gt;                                      &lt;dbl&gt;
+##  1 Afghanistan                               0     
+##  2 Albania                                   0.150 
+##  3 Algeria                                   0.158 
+##  4 Angola                                    0.124 
+##  5 Antigua and Barbuda                       0.116 
+##  6 Argentina                                 0.112 
+##  7 Armenia                                   0.219 
+##  8 Australia                                 0.174 
+##  9 Austria                                   0.0769
+## 10 Azerbaijan                                0.150 
+## # … with 157 more rows</code></pre>
+<pre class="r"><code>healthy %&gt;% group_by(country) %&gt;% summarize(var(BMI_women, na.rm = TRUE),.groups=&quot;drop&quot;) </code></pre>
+<pre><code>## # A tibble: 167 x 2
+##    country             `var(BMI_women, na.rm = TRUE)`
+##    &lt;chr&gt;                                        &lt;dbl&gt;
+##  1 Afghanistan                                 0.0295
+##  2 Albania                                     0.0642
+##  3 Algeria                                     0.185 
+##  4 Angola                                      0.510 
+##  5 Antigua and Barbuda                         0.171 
+##  6 Argentina                                   0.317 
+##  7 Armenia                                     0.182 
+##  8 Australia                                   0.215 
+##  9 Austria                                     0.0357
+## 10 Azerbaijan                                  0.181 
+## # … with 157 more rows</code></pre>
+<pre class="r"><code>healthy %&gt;% group_by(country) %&gt;% summarize(var(Budget_Healthcare, na.rm = TRUE),.groups=&quot;drop&quot;) </code></pre>
+<pre><code>## # A tibble: 167 x 2
+##    country             `var(Budget_Healthcare, na.rm = TRUE)`
+##    &lt;chr&gt;                                                &lt;dbl&gt;
+##  1 Afghanistan                                      0        
+##  2 Albania                                          0.000168 
+##  3 Algeria                                          0.0000666
+##  4 Angola                                           0.000199 
+##  5 Antigua and Barbuda                              0.000189 
+##  6 Argentina                                        0.0000259
+##  7 Armenia                                          0.0000893
+##  8 Australia                                        0.000162 
+##  9 Austria                                          0.000135 
+## 10 Azerbaijan                                       0.000162 
+## # … with 157 more rows</code></pre>
+<pre class="r"><code>healthy %&gt;% group_by(country) %&gt;% summarize(min(Calories, na.rm = TRUE),.groups=&quot;drop&quot;)</code></pre>
+<pre><code>## # A tibble: 167 x 2
+##    country             `min(Calories, na.rm = TRUE)`
+##    &lt;chr&gt;                                       &lt;dbl&gt;
+##  1 Afghanistan                                  1830
+##  2 Albania                                      2720
+##  3 Algeria                                      2730
+##  4 Angola                                       1690
+##  5 Antigua and Barbuda                          2070
+##  6 Argentina                                    2980
+##  7 Armenia                                      2240
+##  8 Australia                                    2990
+##  9 Austria                                      3490
+## 10 Azerbaijan                                   2020
+## # … with 157 more rows</code></pre>
+<pre class="r"><code>healthy %&gt;% group_by(country) %&gt;% summarize(min(BP_Men, na.rm = TRUE),.groups=&quot;drop&quot;)</code></pre>
+<pre><code>## # A tibble: 167 x 2
+##    country             `min(BP_Men, na.rm = TRUE)`
+##    &lt;chr&gt;                                     &lt;dbl&gt;
+##  1 Afghanistan                                 125
+##  2 Albania                                     132
+##  3 Algeria                                     129
+##  4 Angola                                      132
+##  5 Antigua and Barbuda                         131
+##  6 Argentina                                   127
+##  7 Armenia                                     134
+##  8 Australia                                   127
+##  9 Austria                                     131
+## 10 Azerbaijan                                  131
+## # … with 157 more rows</code></pre>
+<pre class="r"><code>healthy %&gt;% group_by(country) %&gt;% summarize(min(BP_Women, na.rm = TRUE),.groups=&quot;drop&quot;) </code></pre>
+<pre><code>## # A tibble: 167 x 2
+##    country             `min(BP_Women, na.rm = TRUE)`
+##    &lt;chr&gt;                                       &lt;dbl&gt;
+##  1 Afghanistan                                   124
+##  2 Albania                                       129
+##  3 Algeria                                       130
+##  4 Angola                                        130
+##  5 Antigua and Barbuda                           125
+##  6 Argentina                                     119
+##  7 Armenia                                       133
+##  8 Australia                                     117
+##  9 Austria                                       124
+## 10 Azerbaijan                                    128
+## # … with 157 more rows</code></pre>
+<pre class="r"><code>healthy %&gt;% group_by(country) %&gt;% summarize(min(BMI_men, na.rm = TRUE),.groups=&quot;drop&quot;)</code></pre>
+<pre><code>## # A tibble: 167 x 2
+##    country             `min(BMI_men, na.rm = TRUE)`
+##    &lt;chr&gt;                                      &lt;dbl&gt;
+##  1 Afghanistan                                 20.6
+##  2 Albania                                     25.3
+##  3 Algeria                                     23.4
+##  4 Angola                                      21.2
+##  5 Antigua and Barbuda                         24.7
+##  6 Argentina                                   26.4
+##  7 Armenia                                     24  
+##  8 Australia                                   26.3
+##  9 Austria                                     25.6
+## 10 Azerbaijan                                  24.5
+## # … with 157 more rows</code></pre>
+<pre class="r"><code>healthy %&gt;% group_by(country) %&gt;% summarize(min(BMI_women, na.rm = TRUE),.groups=&quot;drop&quot;) </code></pre>
+<pre><code>## # A tibble: 167 x 2
+##    country             `min(BMI_women, na.rm = TRUE)`
+##    &lt;chr&gt;                                        &lt;dbl&gt;
+##  1 Afghanistan                                   20.6
+##  2 Albania                                       24.9
+##  3 Algeria                                       25.1
+##  4 Angola                                        21.3
+##  5 Antigua and Barbuda                           26.2
+##  6 Argentina                                     25.7
+##  7 Armenia                                       25.9
+##  8 Australia                                     25.5
+##  9 Austria                                       24.5
+## 10 Azerbaijan                                    26.3
+## # … with 157 more rows</code></pre>
+<pre class="r"><code>healthy %&gt;% group_by(country) %&gt;% summarize(min(Budget_Healthcare, na.rm = TRUE),.groups=&quot;drop&quot;) </code></pre>
+<pre><code>## # A tibble: 167 x 2
+##    country             `min(Budget_Healthcare, na.rm = TRUE)`
+##    &lt;chr&gt;                                                &lt;dbl&gt;
+##  1 Afghanistan                                         0.0148
+##  2 Albania                                             0.0526
+##  3 Algeria                                             0.078 
+##  4 Angola                                              0.0176
+##  5 Antigua and Barbuda                                 0.0875
+##  6 Argentina                                           0.138 
+##  7 Armenia                                             0.0461
+##  8 Australia                                           0.131 
+##  9 Austria                                             0.124 
+## 10 Azerbaijan                                          0.031 
+## # … with 157 more rows</code></pre>
+<pre class="r"><code>healthy %&gt;% group_by(country) %&gt;% summarize(max(Calories, na.rm = TRUE),.groups=&quot;drop&quot;)</code></pre>
+<pre><code>## # A tibble: 167 x 2
+##    country             `max(Calories, na.rm = TRUE)`
+##    &lt;chr&gt;                                       &lt;dbl&gt;
+##  1 Afghanistan                                  2050
+##  2 Albania                                      2950
+##  3 Algeria                                      3050
+##  4 Angola                                       2250
+##  5 Antigua and Barbuda                          2410
+##  6 Argentina                                    3270
+##  7 Armenia                                      2870
+##  8 Australia                                    3200
+##  9 Austria                                      3740
+## 10 Azerbaijan                                   3030
+## # … with 157 more rows</code></pre>
+<pre class="r"><code>healthy %&gt;% group_by(country) %&gt;% summarize(max(BP_Men, na.rm = TRUE),.groups=&quot;drop&quot;)</code></pre>
+<pre><code>## # A tibble: 167 x 2
+##    country             `max(BP_Men, na.rm = TRUE)`
+##    &lt;chr&gt;                                     &lt;dbl&gt;
+##  1 Afghanistan                                 126
+##  2 Albania                                     134
+##  3 Algeria                                     130
+##  4 Angola                                      134
+##  5 Antigua and Barbuda                         134
+##  6 Argentina                                   129
+##  7 Armenia                                     135
+##  8 Australia                                   132
+##  9 Austria                                     134
+## 10 Azerbaijan                                  132
+## # … with 157 more rows</code></pre>
+<pre class="r"><code>healthy %&gt;% group_by(country) %&gt;% summarize(max(BP_Women, na.rm = TRUE),.groups=&quot;drop&quot;) </code></pre>
+<pre><code>## # A tibble: 167 x 2
+##    country             `max(BP_Women, na.rm = TRUE)`
+##    &lt;chr&gt;                                       &lt;dbl&gt;
+##  1 Afghanistan                                   125
+##  2 Albania                                       129
+##  3 Algeria                                       131
+##  4 Angola                                        130
+##  5 Antigua and Barbuda                           126
+##  6 Argentina                                     121
+##  7 Armenia                                       133
+##  8 Australia                                     124
+##  9 Austria                                       129
+## 10 Azerbaijan                                    130
+## # … with 157 more rows</code></pre>
+<pre class="r"><code>healthy %&gt;% group_by(country) %&gt;% summarize(max(BMI_men, na.rm = TRUE),.groups=&quot;drop&quot;)</code></pre>
+<pre><code>## # A tibble: 167 x 2
+##    country             `max(BMI_men, na.rm = TRUE)`
+##    &lt;chr&gt;                                      &lt;dbl&gt;
+##  1 Afghanistan                                 20.6
+##  2 Albania                                     26.4
+##  3 Algeria                                     24.6
+##  4 Angola                                      22.3
+##  5 Antigua and Barbuda                         25.8
+##  6 Argentina                                   27.5
+##  7 Armenia                                     25.4
+##  8 Australia                                   27.6
+##  9 Austria                                     26.5
+## 10 Azerbaijan                                  25.6
+## # … with 157 more rows</code></pre>
+<pre class="r"><code>healthy %&gt;% group_by(country) %&gt;% summarize(max(BMI_women, na.rm = TRUE),.groups=&quot;drop&quot;) </code></pre>
+<pre><code>## # A tibble: 167 x 2
+##    country             `max(BMI_women, na.rm = TRUE)`
+##    &lt;chr&gt;                                        &lt;dbl&gt;
+##  1 Afghanistan                                   21.1
+##  2 Albania                                       25.7
+##  3 Algeria                                       26.4
+##  4 Angola                                        23.5
+##  5 Antigua and Barbuda                           27.5
+##  6 Argentina                                     27.5
+##  7 Armenia                                       27.1
+##  8 Australia                                     26.9
+##  9 Austria                                       25.1
+## 10 Azerbaijan                                    27.5
+## # … with 157 more rows</code></pre>
+<pre class="r"><code>healthy %&gt;% group_by(country) %&gt;% summarize(max(Budget_Healthcare, na.rm = TRUE),.groups=&quot;drop&quot;) </code></pre>
+<pre><code>## # A tibble: 167 x 2
+##    country             `max(Budget_Healthcare, na.rm = TRUE)`
+##    &lt;chr&gt;                                                &lt;dbl&gt;
+##  1 Afghanistan                                         0.0148
+##  2 Albania                                             0.0979
+##  3 Algeria                                             0.101 
+##  4 Angola                                              0.064 
+##  5 Antigua and Barbuda                                 0.129 
+##  6 Argentina                                           0.153 
+##  7 Armenia                                             0.0844
+##  8 Australia                                           0.172 
+##  9 Austria                                             0.162 
+## 10 Azerbaijan                                          0.0843
+## # … with 157 more rows</code></pre>
+<pre class="r"><code>healthy %&gt;% group_by(country) %&gt;% summarize(n_distinct(Calories, na.rm = TRUE),.groups=&quot;drop&quot;)</code></pre>
+<pre><code>## # A tibble: 167 x 2
+##    country             `n_distinct(Calories, na.rm = TRUE)`
+##    &lt;chr&gt;                                              &lt;int&gt;
+##  1 Afghanistan                                            6
+##  2 Albania                                                9
+##  3 Algeria                                               12
+##  4 Angola                                                13
+##  5 Antigua and Barbuda                                    9
+##  6 Argentina                                             10
+##  7 Armenia                                               11
+##  8 Australia                                              8
+##  9 Austria                                               10
+## 10 Azerbaijan                                            14
+## # … with 157 more rows</code></pre>
+<pre class="r"><code>healthy %&gt;% group_by(country) %&gt;% summarize(n_distinct(BP_Men, na.rm = TRUE),.groups=&quot;drop&quot;)</code></pre>
+<pre><code>## # A tibble: 167 x 2
+##    country             `n_distinct(BP_Men, na.rm = TRUE)`
+##    &lt;chr&gt;                                            &lt;int&gt;
+##  1 Afghanistan                                          2
+##  2 Albania                                              3
+##  3 Algeria                                              2
+##  4 Angola                                               3
+##  5 Antigua and Barbuda                                  4
+##  6 Argentina                                            3
+##  7 Armenia                                              2
+##  8 Australia                                            6
+##  9 Austria                                              4
+## 10 Azerbaijan                                           2
+## # … with 157 more rows</code></pre>
+<pre class="r"><code>healthy %&gt;% group_by(country) %&gt;% summarize(n_distinct(BP_Women, na.rm = TRUE),.groups=&quot;drop&quot;) </code></pre>
+<pre><code>## # A tibble: 167 x 2
+##    country             `n_distinct(BP_Women, na.rm = TRUE)`
+##    &lt;chr&gt;                                              &lt;int&gt;
+##  1 Afghanistan                                            2
+##  2 Albania                                                1
+##  3 Algeria                                                2
+##  4 Angola                                                 1
+##  5 Antigua and Barbuda                                    2
+##  6 Argentina                                              3
+##  7 Armenia                                                1
+##  8 Australia                                              8
+##  9 Austria                                                6
+## 10 Azerbaijan                                             3
+## # … with 157 more rows</code></pre>
+<pre class="r"><code>healthy %&gt;% group_by(country) %&gt;% summarize(n_distinct(BMI_men, na.rm = TRUE),.groups=&quot;drop&quot;)</code></pre>
+<pre><code>## # A tibble: 167 x 2
+##    country             `n_distinct(BMI_men, na.rm = TRUE)`
+##    &lt;chr&gt;                                             &lt;int&gt;
+##  1 Afghanistan                                           1
+##  2 Albania                                              12
+##  3 Algeria                                              12
+##  4 Angola                                               10
+##  5 Antigua and Barbuda                                  11
+##  6 Argentina                                            12
+##  7 Armenia                                              11
+##  8 Australia                                            13
+##  9 Austria                                              10
+## 10 Azerbaijan                                            9
+## # … with 157 more rows</code></pre>
+<pre class="r"><code>healthy %&gt;% group_by(country) %&gt;% summarize(n_distinct(BMI_women, na.rm = TRUE),.groups=&quot;drop&quot;) </code></pre>
+<pre><code>## # A tibble: 167 x 2
+##    country             `n_distinct(BMI_women, na.rm = TRUE)`
+##    &lt;chr&gt;                                               &lt;int&gt;
+##  1 Afghanistan                                             6
+##  2 Albania                                                 9
+##  3 Algeria                                                13
+##  4 Angola                                                 14
+##  5 Antigua and Barbuda                                    13
+##  6 Argentina                                              14
+##  7 Armenia                                                11
+##  8 Australia                                              14
+##  9 Austria                                                 7
+## 10 Azerbaijan                                              9
+## # … with 157 more rows</code></pre>
+<pre class="r"><code>healthy %&gt;% group_by(country) %&gt;% summarize(n_distinct(Budget_Healthcare, na.rm = TRUE),.groups=&quot;drop&quot;) </code></pre>
+<pre><code>## # A tibble: 167 x 2
+##    country             `n_distinct(Budget_Healthcare, na.rm = TRUE)`
+##    &lt;chr&gt;                                                       &lt;int&gt;
+##  1 Afghanistan                                                     1
+##  2 Albania                                                        14
+##  3 Algeria                                                        14
+##  4 Angola                                                         13
+##  5 Antigua and Barbuda                                            12
+##  6 Argentina                                                      11
+##  7 Armenia                                                        13
+##  8 Australia                                                      11
+##  9 Austria                                                        12
+## 10 Azerbaijan                                                     13
+## # … with 157 more rows</code></pre>
+<pre class="r"><code>healthy %&gt;% group_by(country) %&gt;% summarize(cor = cor(Calories, Budget_Healthcare),.groups = &quot;drop&quot;, use = &quot;complete.obs&quot;)</code></pre>
+<pre><code>## Warning in cor(Calories, Budget_Healthcare): the standard deviation is zero
+
+## Warning in cor(Calories, Budget_Healthcare): the standard deviation is zero</code></pre>
+<pre><code>## # A tibble: 167 x 3
+##    country                 cor use         
+##    &lt;chr&gt;                 &lt;dbl&gt; &lt;chr&gt;       
+##  1 Afghanistan         NA      complete.obs
+##  2 Albania              0.622  complete.obs
+##  3 Algeria             -0.883  complete.obs
+##  4 Angola               0.641  complete.obs
+##  5 Antigua and Barbuda -0.192  complete.obs
+##  6 Argentina           -0.214  complete.obs
+##  7 Armenia              0.0886 complete.obs
+##  8 Australia            0.466  complete.obs
+##  9 Austria              0.778  complete.obs
+## 10 Azerbaijan          -0.755  complete.obs
+## # … with 157 more rows</code></pre>
+<pre class="r"><code>healthy %&gt;% group_by(country) %&gt;% summarize(cor = cor(BMI_men, BP_Men),.groups = &quot;drop&quot;, use = &quot;complete.obs&quot;)</code></pre>
+<pre><code>## Warning in cor(BMI_men, BP_Men): the standard deviation is zero</code></pre>
+<pre><code>## Warning in cor(BMI_men, BP_Men): the standard deviation is zero
+
+## Warning in cor(BMI_men, BP_Men): the standard deviation is zero
+
+## Warning in cor(BMI_men, BP_Men): the standard deviation is zero
+
+## Warning in cor(BMI_men, BP_Men): the standard deviation is zero
+
+## Warning in cor(BMI_men, BP_Men): the standard deviation is zero</code></pre>
+<pre><code>## # A tibble: 167 x 3
+##    country                cor use         
+##    &lt;chr&gt;                &lt;dbl&gt; &lt;chr&gt;       
+##  1 Afghanistan         NA     complete.obs
+##  2 Albania              0.922 complete.obs
+##  3 Algeria              0.888 complete.obs
+##  4 Angola               0.584 complete.obs
+##  5 Antigua and Barbuda  0.946 complete.obs
+##  6 Argentina            0.694 complete.obs
+##  7 Armenia              0.881 complete.obs
+##  8 Australia           -0.978 complete.obs
+##  9 Austria             -0.926 complete.obs
+## 10 Azerbaijan           0.516 complete.obs
+## # … with 157 more rows</code></pre>
+<pre class="r"><code>healthy %&gt;% group_by(country) %&gt;% summarize(cor = cor(BMI_women, BP_Women),.groups = &quot;drop&quot;, use = &quot;complete.obs&quot;)</code></pre>
+<pre><code>## Warning in cor(BMI_women, BP_Women): the standard deviation is zero</code></pre>
+<pre><code>## Warning in cor(BMI_women, BP_Women): the standard deviation is zero
+
+## Warning in cor(BMI_women, BP_Women): the standard deviation is zero
+
+## Warning in cor(BMI_women, BP_Women): the standard deviation is zero
+
+## Warning in cor(BMI_women, BP_Women): the standard deviation is zero
+
+## Warning in cor(BMI_women, BP_Women): the standard deviation is zero
+
+## Warning in cor(BMI_women, BP_Women): the standard deviation is zero
+
+## Warning in cor(BMI_women, BP_Women): the standard deviation is zero
+
+## Warning in cor(BMI_women, BP_Women): the standard deviation is zero
+
+## Warning in cor(BMI_women, BP_Women): the standard deviation is zero
+
+## Warning in cor(BMI_women, BP_Women): the standard deviation is zero
+
+## Warning in cor(BMI_women, BP_Women): the standard deviation is zero
+
+## Warning in cor(BMI_women, BP_Women): the standard deviation is zero
+
+## Warning in cor(BMI_women, BP_Women): the standard deviation is zero
+
+## Warning in cor(BMI_women, BP_Women): the standard deviation is zero
+
+## Warning in cor(BMI_women, BP_Women): the standard deviation is zero
+
+## Warning in cor(BMI_women, BP_Women): the standard deviation is zero
+
+## Warning in cor(BMI_women, BP_Women): the standard deviation is zero</code></pre>
+<pre><code>## # A tibble: 167 x 3
+##    country                cor use         
+##    &lt;chr&gt;                &lt;dbl&gt; &lt;chr&gt;       
+##  1 Afghanistan          0.767 complete.obs
+##  2 Albania             NA     complete.obs
+##  3 Algeria             -0.845 complete.obs
+##  4 Angola              NA     complete.obs
+##  5 Antigua and Barbuda -0.408 complete.obs
+##  6 Argentina           -0.910 complete.obs
+##  7 Armenia             NA     complete.obs
+##  8 Australia           -0.982 complete.obs
+##  9 Austria             -0.977 complete.obs
+## 10 Azerbaijan          -0.184 complete.obs
+## # … with 157 more rows</code></pre>
+<div id="summary-statistics-were-calulated-for-each-numeric-variable-present-in-the-dataset." class="section level6">
+<h6>Summary statistics were calulated for each numeric variable present in the dataset.</h6>
+</div>
+<div id="after-using-all-of-the-fucntions-such-as-mean-sd-quantile-min-max-etc.-inside-of-summarize-i-can-see-that-more-developed-countries-such-as-belgium-and-greece-have-higher-average-caloric-intakes-per-day-the-same-was-seen-for-higher-blood-pressures-both-of-men-and-women.-specifically-in-smaller-and-european-countries." class="section level6">
+<h6>After using all of the fucntions such as: mean, sd, quantile, min, max, etc. inside of summarize, I can see that more developed countries such as Belgium and Greece have higher average caloric intakes per day, the same was seen for higher blood pressures both of men and women. Specifically in smaller and european countries.</h6>
+</div>
+<div id="bmi-was-seen-to-be-higher-in-the-united-states-as-well-as-other-developed-countries-but-interestingly-united-arab-emirates-was-also-above-28.-from-outside-information-the-wage-gap-is-very-pronounced-in-united-arab-emirates-so-the-mean-may-be-skewed-higher-by-a-smaller-population-with-exceedingly-high-access-to-cheap-calorically-dense-foods." class="section level6">
+<h6>BMI was seen to be higher in the United States as well as other developed countries but interestingly, United Arab Emirates was also above 28. From outside information, the wage gap is very pronounced in United Arab Emirates so the mean may be skewed higher by a smaller population with exceedingly high access to cheap, calorically dense foods.</h6>
+</div>
+<div id="countries-like-sudan-and-sierra-leon-as-well-as-djibouti-have-the-smallest-bmis-both-for-women-and-men.-many-careers-in-these-countries-are-more-rural-hands-on-agriculture-so-it-makes-sense-that-manual-labor-would-lend-itself-to-a-lower-body-mass-index.-food-scarcity-may-be-more-prevalent-as-supply-would-depend-more-on-the-weather-and-is-less-secure-than-a-place-like-belgium." class="section level6">
+<h6>Countries like Sudan and Sierra Leon as well as Djibouti have the smallest BMI's both for women and men. Many careers in these countries are more rural, hands on agriculture so it makes sense that manual labor would lend itself to a lower body mass index. Food scarcity may be more prevalent as supply would depend more on the weather and is less secure than a place like Belgium.</h6>
+</div>
+<div id="i-think-that-it-is-also-important-to-note-that-the-metrics-for-calculating-bmi-are-not-the-most-accurate-to-a-true-testament-of-fitness-or-health.-using-mutate-i-created-a-new-variable-that-divided-the-number-of-calories-by-2000-which-is-the-daily-recommended-intake-to-show-the-percentage-over-or-under-citizens-of-a-country-on-average-eat." class="section level6">
+<h6>I think that it is also important to note that the metrics for calculating BMI are not the most accurate to a true testament of fitness or health. Using mutate I created a new variable that divided the number of calories by 2000, which is the daily recommended intake, to show the percentage over or under citizens of a country on average eat.</h6>
+<pre class="r"><code>library(ggcorrplot)
+
+numeric &lt;- healthy %&gt;% select(BP_Men:Budget_Healthcare)
+corrplot::corrplot(cor(numeric)) </code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-6-1.png" width="672" /> ###### The correlation graph shows that there is a strong correlation between similar variables (blood pressure for men and women follow similar trends, as does BMI between men and women. Interestingly, there was more of a relationship between percentage of budget a country spent on healthcare and BMI than Blood Pressure. This is interesting because both are indicative of health. There is also more of a correlation between budget for healthcare and the men's blood pressure and BMI rather than women's. It would be interesting if there was another variable that had funding for women specific healthcare such as mammograms to compare this theory.</p>
+<pre class="r"><code>countries %&gt;% ggplot(aes(year, Calories, color = country)) + geom_point() + ggtitle(&quot;Calories Per Year in Different Continents&quot;) + theme(plot.title=element_text(hjust = 50)) + scale_x_discrete(breaks=seq(0, 2010, 5)) +
+theme(axis.text.x = element_text(color=&quot;black&quot;, size=6, angle=90)) + geom_smooth(method = &quot;lm&quot;) + facet_wrap(~country) </code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-7-1.png" width="672" /> ###### This grouping of charts consistently indicates that countries in Europe eat more calories per day than any other continent. Asia sees the biggest spread. This may because there are a lot of different countries in Asia that cause it to fluctuate wildly or it could be because agriculture is a large part of the economy in large countries like China and India so the weather could play a large role in the available calories. Africa sees a positve slope, indicating that over time more calories are being consumed. This may be due to an increase in industrialization brought on by technlogy making agriculture easier and yielding more over time. Norht America and South America both stayed fairly steady over time.</p>
+<pre class="r"><code>countries &lt;- drop_na(countries)
+
+ggplot(countries, aes(year, Budget_Healthcare, fill=country)) + 
+geom_bar(stat = &quot;summary&quot;, fun.y = &quot;mean&quot;) + scale_fill_brewer(palette = &quot;Pastel2&quot;) + ggtitle(&quot;Percent of Budget on Healthcare&quot;) + ylab(&quot;Percentage as Decimal&quot;)</code></pre>
+<pre><code>## Warning: Ignoring unknown parameters: fun.y</code></pre>
+<pre><code>## No summary function supplied, defaulting to `mean_se()`</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-8-1.png" width="672" /> ###### It appears that Aisa has consistently spent less money on healthcare than other continents. In the 1990's, Africa had simialr levels of percentage spending as Asia but has increased over time. North America initially spent most but has decreased over time. Europe has more of less stayed the same over time, but has always been one of the cotinents that spends the most of the budget in comparison on healthcare. This data had a lot of values for NA so it may be less conclusive.</p>
+<pre class="r"><code># Determining number of clusters 
+health &lt;-  healthy %&gt;% select(-2,-country,-year)
+health_nums &lt;-  health %&gt;% select_if(is.numeric) %&gt;% scale
+
+library(cluster)
+library(factoextra)</code></pre>
+<pre><code>## Welcome! Want to learn more? See two factoextra-related books at https://goo.gl/ve3WBa</code></pre>
+<pre class="r"><code>pam.res &lt;- pam(health, 6)
+pam.res$medoids</code></pre>
+<pre><code>##      BMI_men BMI_women BP_Men BP_Women Calories Budget_Healthcare
+## [1,]    21.2      22.5    129      127     2050            0.1030
+## [2,]    26.1      26.6    130      127     2830            0.0542
+## [3,]    25.1      26.6    130      126     3120            0.1320
+## [4,]    23.7      25.1    128      126     2330            0.0802
+## [5,]    21.6      24.5    130      128     2580            0.1160
+## [6,]    26.8      25.8    132      125     3480            0.1700</code></pre>
+<pre class="r"><code>head(pam.res$cluster)</code></pre>
+<pre><code>## [1] 1 1 1 1 1 1</code></pre>
+<pre class="r"><code>pam.res &lt;- pam(scale(health), 6)
+clusplot(pam.res, main = &quot;Cluster plot, k = 6&quot;, color = TRUE)</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<pre class="r"><code>fviz_cluster(pam.res)</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-9-2.png" width="672" /></p>
+<pre class="r"><code>clust_df &lt;- health %&gt;% select(c(BP_Men, BMI_men, Budget_Healthcare))
+
+clusplot(pam.res, main = &quot;Cluster plot, k = 6&quot;, color = TRUE)</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-9-3.png" width="672" /> ###### This indicates that ther should be two clusters.</p>
+<pre class="r"><code>ds_pam &lt;- clust_df%&gt;% pam(3)
+ds_pam</code></pre>
+<pre><code>## Medoids:
+##        ID BP_Men BMI_men Budget_Healthcare
+## [1,] 1279    127    24.5            0.0880
+## [2,] 1543    133    25.8            0.1230
+## [3,] 2116    132    21.8            0.0985
+## Clustering vector:
+##    [1] 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 3 3
+##   [38] 3 3 3 3 3 3 3 3 3 3 3 3 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1
+##   [75] 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 2 2 2 2 2 2
+##  [112] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1
+##  [149] 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+##  [186] 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 3 3 3 3 3 3 3 3 3 3
+##  [223] 3 3 3 3 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3
+##  [260] 3 3 3 3 3 3 3 3 3 2 2 2 2 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3 3 3 1 1 1 1 1 1 1
+##  [297] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 3 3 3 3 3 3 3 3 3 3 3 1 1 1 1 1 1 1 1 1
+##  [334] 1 1 1 1 1 1 1 1 1 1 1 1 1 3 3 3 3 3 3 1 1 1 1 1 1 1 1 1 1 1 1 1 1 3 3 3 3
+##  [371] 3 3 3 3 3 2 2 2 2 2 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+##  [408] 3 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+##  [445] 1 1 1 1 1 1 3 3 3 3 3 3 3 3 3 3 3 3 3 3 1 1 1 1 1 1 1 1 1 1 1 1 1 1 3 3 3
+##  [482] 3 3 3 3 3 3 3 3 3 3 3 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1
+##  [519] 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+##  [556] 2 2 2 2 2 2 2 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 2 2 2 2 2 2 2 2 2 2 1 1
+##  [593] 1 1 1 1 1 1 1 1 1 1 1 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+##  [630] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3 3
+##  [667] 3 3 3 3 3 3 3 3 1 1 1 1 1 1 1 1 1 3 3 3 3 3 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2
+##  [704] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+##  [741] 2 2 2 2 3 3 3 3 3 3 3 3 3 3 3 3 3 3 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+##  [778] 2 2 2 2 2 2 2 2 2 3 3 3 3 3 3 3 1 1 1 1 1 1 3 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+##  [815] 1 1 1 1 1 1 1 1 1 1 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 3 3 3 3 3 3 3 3 3
+##  [852] 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+##  [889] 1 1 1 1 1 1 1 1 3 3 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2
+##  [926] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+##  [963] 1 1 3 3 3 3 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2
+## [1000] 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2
+## [1037] 2 1 1 1 1 1 1 1 1 1 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 1 1 1 1 1 1 1 1
+## [1074] 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 3 3 3 3 3 3 3 3 3 3 3 1 1 1
+## [1111] 1 1 1 1 1 1 1 1 1 1 1 2 2 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2
+## [1148] 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1
+## [1185] 1 1 1 1 1 1 1 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 2 2 2 2 2
+## [1222] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+## [1259] 3 3 3 3 3 3 3 3 3 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+## [1296] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3 3 3 3 3
+## [1333] 3 3 3 3 3 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2
+## [1370] 3 3 3 3 3 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1
+## [1407] 1 1 1 1 3 3 3 3 3 3 3 3 3 3 3 3 3 3 1 1 1 1 1 1 1 1 1 1 1 1 1 1 3 3 3 3 3
+## [1444] 3 3 3 3 3 3 3 3 3 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+## [1481] 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 3 3 3 3 3 3 3 3 3
+## [1518] 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+## [1555] 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1
+## [1592] 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 1 1 1 1 1 1 1 1 1 2 2 2 2 2 1 1 1 1 1 1 1 1
+## [1629] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+## [1666] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+## [1703] 2 2 3 3 3 3 3 3 3 3 3 3 3 3 3 3 2 2 2 2 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3 3 3
+## [1740] 3 3 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 2 3 3 3 3 3 3 3 3 3 3 3 3 3 3 2 2
+## [1777] 2 3 3 3 3 3 3 3 3 3 3 3 3 3 3 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+## [1814] 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 3 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1
+## [1851] 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1
+## [1888] 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3 1 1 2 2 2 2 2 2 2 1 1 1 1 1 1 1
+## [1925] 1 1 1 1 2 2 2 3 3 3 3 3 3 3 3 3 3 3 3 3 3 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2
+## [1962] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3 3 3 3 3 3 3
+## [1999] 3 3 3 1 1 1 1 1 1 3 3 3 3 3 3 3 3 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+## [2036] 1 1 1 1 1 1 1 1 3 3 3 3 3 3 3 3 3 3 3 3 3 3 1 1 1 1 1 1 1 1 1 2 2 2 2 2 1
+## [2073] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2
+## [2110] 2 2 2 2 3 3 3 3 3 3 3 3 3 3 3 3 3 3 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1
+## [2147] 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+## [2184] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2
+## [2221] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+## [2258] 1 1 1 1 1 1 1 1 1 1 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+## Objective function:
+##    build     swap 
+## 2.329766 2.223674 
+## 
+## Available components:
+##  [1] &quot;medoids&quot;    &quot;id.med&quot;     &quot;clustering&quot; &quot;objective&quot;  &quot;isolation&quot; 
+##  [6] &quot;clusinfo&quot;   &quot;silinfo&quot;    &quot;diss&quot;       &quot;call&quot;       &quot;data&quot;</code></pre>
+<pre class="r"><code>clust_final&lt;-clust_df%&gt;%mutate(cluster=as.factor(ds_pam$clustering))
+confmat&lt;-clust_final%&gt;% group_by(Budget_Healthcare) %&gt;% count(cluster)%&gt;%
+  arrange(desc(n))%&gt;% 
+  pivot_wider(names_from=&quot;cluster&quot;,values_from=&quot;n&quot;,values_fill = list(&#39;n&#39;=0))
+confmat</code></pre>
+<pre><code>## # A tibble: 646 x 4
+## # Groups:   Budget_Healthcare [646]
+##    Budget_Healthcare   `2`   `1`   `3`
+##                &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;
+##  1             0.115    18     2     5
+##  2             0.137    15     3     4
+##  3             0.118    14     6     4
+##  4             0.136    14     2     1
+##  5             0.102    10    13     6
+##  6             0.133    13     3     6
+##  7             0.112     5    12     3
+##  8             0.113    12     7     9
+##  9             0.119    12     9     9
+## 10             0.139    12     7     0
+## # … with 636 more rows</code></pre>
+<pre class="r"><code>#evaluating cluster
+ds_pam$silinfo$avg.width</code></pre>
+<pre><code>## [1] 0.3964938</code></pre>
+<pre class="r"><code>ggplot(clust_final, aes(x=BMI_men,y=BP_Men, color=cluster, size = Budget_Healthcare))+
+geom_point() +
+ggtitle(&quot;PAM Clustering of Male BMI and BP by Percent of Budget Allocated to Healthcare&quot;)</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-10-1.png" width="672" /> ###### Ideal amount of clusters was much less than the three that I went with because clustering of data was not strong, regardless of number of clusters and this was easier to at least visualize.</p>
+</div>
+</div>
+
+            
+        <hr>         <div class="related-posts">
+                <h5>Related Posts</h5>
+                
+              </div> 
+            </div>
+          </div>
+
+   <hr>  <div class="disqus">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+
+    (function() {
+      
+      
+      if (window.location.hostname == "localhost")
+        return;
+
+      var disqus_shortname = '';
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div> 
+        </div>
+      </div>
+    </div>
+
+    
+    <footer>
+  <div id="footer">
+    <div class="container">
+      <p class="text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io/">Hugo</a> and
+      <a href="http://www.github.com/nurlansu/hugo-sustain/">sustain</a> with ♥</p>
+    </div>
+  </div>
+</footer>
+<div class="footer"></div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="../../js/docs.min.js"></script>
+<script src="../../js/main.js"></script>
+
+<script src="../../js/ie10-viewport-bug-workaround.js"></script>
+
+
+    
+  </body>
+</html>
